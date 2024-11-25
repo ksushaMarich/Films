@@ -23,7 +23,8 @@ class MainView: UIView {
     
     init() {
         super.init(frame: .zero)
-        backgroundColor = .yellow
+        backgroundColor = .red
+        setupView()
     }
     
     required init?(coder: NSCoder) {
