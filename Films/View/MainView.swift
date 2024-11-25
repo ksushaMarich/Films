@@ -8,13 +8,37 @@
 import UIKit
 
 class MainView: UIView {
-
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+    
+    //MARK: - naming
+    private lazy var textField: UITextField = {
+        let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.layer.masksToBounds = true
+        textField.layer.cornerRadius = 14
+        textField.backgroundColor = .white
+        return textField
+    }()
+    
+    //MARK: - init
+    
+    init() {
+        super.init(frame: .zero)
+        backgroundColor = .yellow
     }
-    */
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: - setupViewMethods
+    private func setupView() {
+        addSubview(textField)
+        
+        NSLayoutConstraint.activate([
+            textField.centerXAnchor.constraint(equalTo: centerXAnchor),
+            textField.centerYAnchor.constraint(equalTo: centerYAnchor),
+            textField.heightAnchor.constraint(equalToConstant: 50),
+            textField.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 8/10),
+        ])
+    }
 }
