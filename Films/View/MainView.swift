@@ -25,6 +25,27 @@ class MainView: UIView {
         super.init(frame: .zero)
         backgroundColor = .red
         setupView()
+        
+        let url = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=5e491b5e3a7e7c82df6c07d1c7448db1")!
+
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Ошибка: \(error.localizedDescription)")
+                return
+            }
+
+            guard let data = data else {
+                print("Нет данных")
+                return
+            }
+
+            if let json = try? JSONSerialization.jsonObject(with: data, options: []) {
+                print("Ответ: \(json)")
+            }
+        }
+
+        task.resume()
+        
     }
     
     required init?(coder: NSCoder) {
