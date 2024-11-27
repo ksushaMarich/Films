@@ -26,7 +26,10 @@ class MainView: UIView {
         backgroundColor = .red
         setupView()
         
-        let url = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=5e491b5e3a7e7c82df6c07d1c7448db1")!
+        let apiKey = "5e491b5e3a7e7c82df6c07d1c7448db1"
+        let query = "Inception".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let urlString = "https://api.themoviedb.org/3/search/movie?api_key=\(apiKey)&query=\(query)"
+        let url = URL(string: urlString)!
 
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
