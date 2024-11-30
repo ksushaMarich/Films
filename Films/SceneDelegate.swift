@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         //добавляем корневой контролер в окно
         window?.rootViewController = UINavigationController(
-            rootViewController: MainViewController()
+            rootViewController: StartViewController()
         )
         window?.makeKeyAndVisible()
     }

@@ -7,9 +7,16 @@
 
 import UIKit
 
+protocol MainViewDelegate: AnyObject {
+    func didTapSearchButton(with text: String)
+}
+
 class MainView: UIView {
     
     //MARK: - naming
+    
+    weak var delegate: MainViewDelegate?
+    
     private lazy var textField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -25,30 +32,6 @@ class MainView: UIView {
         super.init(frame: .zero)
         backgroundColor = .red
         setupView()
-        
-        let apiKey = "5e491b5e3a7e7c82df6c07d1c7448db1"
-        let query = "Inception".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let urlString = "https://api.themoviedb.org/3/search/movie?api_key=\(apiKey)&query=\(query)"
-        let url = URL(string: urlString)!
-
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Ошибка: \(error.localizedDescription)")
-                return
-            }
-
-            guard let data = data else {
-                print("Нет данных")
-                return
-            }
-
-            if let json = try? JSONSerialization.jsonObject(with: data, options: []) {
-                print("Ответ: \(json)")
-            }
-        }
-
-        task.resume()
-        
     }
     
     required init?(coder: NSCoder) {
