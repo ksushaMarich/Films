@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class StartViewController: UIViewController {
     
     //MARK: - naming
     
@@ -22,6 +22,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        NetworkManager.shared.searchMovies(query: "убить била")
     }
     
     //MARK: - setupViewMethods
@@ -35,6 +36,12 @@ class MainViewController: UIViewController {
             mainView.topAnchor.constraint(equalTo: view.topAnchor),
             mainView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         ])
+    }
+}
+
+extension StartViewController: MainViewDelegate {
+    func didTapSearchButton(with text: String) {
+        present(<#T##viewControllerToPresent: UIViewController##UIViewController#>, animated: true)
     }
 }
 
