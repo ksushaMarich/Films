@@ -18,7 +18,7 @@
 		CE19B0C12CF4948D00B73714 /* FilmsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE19B0C02CF4948D00B73714 /* FilmsTests.swift */; };
 		CE19B0CB2CF4948D00B73714 /* FilmsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE19B0CA2CF4948D00B73714 /* FilmsUITests.swift */; };
 		CE19B0CD2CF4948D00B73714 /* FilmsUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE19B0CC2CF4948D00B73714 /* FilmsUITestsLaunchTests.swift */; };
-		CE19B0DC2CF49E1E00B73714 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE19B0DB2CF49E1E00B73714 /* MainView.swift */; };
+		CE19B0DC2CF49E1E00B73714 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE19B0DB2CF49E1E00B73714 /* StartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,7 +54,7 @@
 		CE19B0C62CF4948D00B73714 /* FilmsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FilmsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE19B0CA2CF4948D00B73714 /* FilmsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmsUITests.swift; sourceTree = "<group>"; };
 		CE19B0CC2CF4948D00B73714 /* FilmsUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmsUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		CE19B0DB2CF49E1E00B73714 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		CE19B0DB2CF49E1E00B73714 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,7 +154,7 @@
 		CE19B0DA2CF49D7500B73714 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				CE19B0DB2CF49E1E00B73714 /* MainView.swift */,
+				CE19B0DB2CF49E1E00B73714 /* StartView.swift */,
 				1693590B2CFA218100B4B001 /* RespondTableView.swift */,
 			);
 			path = View;
@@ -292,7 +292,7 @@
 			files = (
 				1693590A2CF9FA4000B4B001 /* RespondViewController.swift in Sources */,
 				CE19B0AE2CF4948C00B73714 /* StartViewController.swift in Sources */,
-				CE19B0DC2CF49E1E00B73714 /* MainView.swift in Sources */,
+				CE19B0DC2CF49E1E00B73714 /* StartView.swift in Sources */,
 				111F72862CF98FDD006B8B39 /* NetworkManager.swift in Sources */,
 				CE19B0AA2CF4948C00B73714 /* AppDelegate.swift in Sources */,
 				1693590C2CFA218100B4B001 /* RespondTableView.swift in Sources */,

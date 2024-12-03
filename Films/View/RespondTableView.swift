@@ -9,6 +9,9 @@ import UIKit
 
 class RespondTableView: UITableView {
 
-   
-
+    //MARK: - naming
+    
+    //MARK: - init
+    
+    //MARK: - setupView methods
 }

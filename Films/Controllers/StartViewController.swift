@@ -11,8 +11,9 @@ class StartViewController: UIViewController {
     
     //MARK: - naming
     
-    private lazy var mainView: MainView = {
-        let view = MainView()
+    private lazy var mainView: StartView = {
+        let view = StartView()
+        view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -39,9 +40,15 @@ class StartViewController: UIViewController {
     }
 }
 
-extension StartViewController: MainViewDelegate {
+extension StartViewController: StartViewDelegate {
     func didTapSearchButton(with text: String) {
-        present(<#T##viewControllerToPresent: UIViewController##UIViewController#>, animated: true)
+        let networkManager = NetworkManager.shared
+        networkManager.searchMovies(query: text)
+        guard let error = networkManager.error else {
+            navigationController?.pushViewController(RespondViewController(movies: networkManager.movies), animated: true)
+            return
+        }
+        print(error)
     }
 }
 

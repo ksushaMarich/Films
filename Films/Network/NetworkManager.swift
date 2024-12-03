@@ -27,8 +27,11 @@ class NetworkManager {
     static let shared = NetworkManager()
     private let apiKey = "5e491b5e3a7e7c82df6c07d1c7448db1"
     private let baseURL = "https://api.themoviedb.org/3"
+    private let language = "ru-RU"
     private var response: MovieResponse?
-    let language = "ru-RU" // Устанавливаем язык
+    
+    var movies: [Movie] = []
+    var error: String?
 
     private init() {}
 
@@ -36,18 +39,18 @@ class NetworkManager {
         let urlString = "\(baseURL)/search/movie?api_key=\(apiKey)&query=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&language=\(language)"
         
         guard let url = URL(string: urlString) else {
-            print("url is not found")
+            self.error = "url is not found"
             return
         }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
-                print("Ошибка  \(error.localizedDescription)")
+                self.error = "Ошибка  \(error.localizedDescription)"
                 return
             }
             
             guard let data = data else {
-                print("Нет данных")
+                self.error = "Нет данных"
                 return
             }
             
@@ -55,11 +58,12 @@ class NetworkManager {
                 let response = try JSONDecoder().decode(MovieResponse.self, from: data)
                 self.response = response
                 for movie in response.results {
-                    print(movie.title)
+                    self.movies.append(movie)
                 }
                 
             } catch {
-                print("Ошибка парсинга")
+                self.error = "Ошибка парсинга"
+                return
             }
         }.resume()
     }
