@@ -13,7 +13,7 @@ class RespondViewController: UIViewController {
     let movies: [Movie]
     
     private lazy var respondTableView: RespondTableView = {
-        let tableView = respondTableView
+        let tableView = RespondTableView(movies: movies)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -22,6 +22,7 @@ class RespondViewController: UIViewController {
     init(movies: [Movie]) {
         self.movies = movies
         super.init(nibName: nil, bundle: nil)
+        setupView()
     }
     
     required init?(coder: NSCoder) {
@@ -39,4 +40,13 @@ class RespondViewController: UIViewController {
     }
     
     //MARK: - setup view methods
+    private func setupView() {
+        view.addSubview(respondTableView)
+        NSLayoutConstraint.activate([
+            respondTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            respondTableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            respondTableView.topAnchor.constraint(equalTo: view.topAnchor),
+            respondTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        ])
+    }
 }
