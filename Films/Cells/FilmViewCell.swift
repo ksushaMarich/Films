@@ -59,8 +59,9 @@ class FilmViewCell: UITableViewCell {
     }
     
     //MARK: - configuring cell method
-    func configuring(movie: Movie, poster: UIImage) {
+    func configuring(movie: Movie, poster: UIImage?) {
         titleLabel.text = movie.title
+        guard let poster = poster else { return }
         posterImageView.image = poster
     }
 }

@@ -54,6 +54,7 @@ class NetworkManager {
                 self.error = "Нет данных"
                 return
             }
+            print(data)
             
             do {
                 let response = try JSONDecoder().decode(MovieResponse.self, from: data)
@@ -76,7 +77,7 @@ class NetworkManager {
         
         for movie in movies {
             guard let url = movie.posterURL else {
-                self.error = "url is not found"
+                self.error = "url poster URL is not found "
                 return
             }
             URLSession.shared.dataTask(with: url) { data, response, error in

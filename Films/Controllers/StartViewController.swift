@@ -46,7 +46,7 @@ extension StartViewController: StartViewDelegate {
         networkManager.searchMovies(query: text)
         networkManager.downloadPosters()
         guard let error = networkManager.error else {
-            navigationController?.pushViewController(FoundMoviesViewController(movies: networkManager.movies, postersImages: networkManager.posters), animated: true)
+            navigationController?.pushViewController(FoundMoviesViewController(), animated: true)
             return
         }
         print(error)
