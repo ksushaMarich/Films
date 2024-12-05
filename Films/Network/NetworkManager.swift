@@ -5,7 +5,7 @@
 //  Created by Ксюша on 29.11.2024.
 //
 
-import Foundation
+import UIKit
 
 struct MovieResponse: Codable{
     let results: [Movie]
@@ -29,10 +29,11 @@ class NetworkManager {
     private let baseURL = "https://api.themoviedb.org/3"
     private let language = "ru-RU"
     private var response: MovieResponse?
+    var error: String?
     
     var movies: [Movie] = []
-    var error: String?
-
+    var posters: [UIImage?] = []
+    
     private init() {}
 
     func searchMovies(query: String) {
@@ -57,14 +58,37 @@ class NetworkManager {
             do {
                 let response = try JSONDecoder().decode(MovieResponse.self, from: data)
                 self.response = response
+                var movies: [Movie] = []
                 for movie in response.results {
-                    self.movies.append(movie)
+                    movies.append(movie)
                 }
+                self.movies = movies
                 
             } catch {
                 self.error = "Ошибка парсинга"
                 return
             }
         }.resume()
+    }
+    
+    func downloadPosters() {
+        var posters: [UIImage?] = []
+        
+        for movie in movies {
+            guard let url = movie.posterURL else {
+                self.error = "url is not found"
+                return
+            }
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    self.error = " Ошибка загрузки изображения: \(error.localizedDescription)"
+                    posters.append(nil)
+                    return
+                }
+                guard let data = data, let image = UIImage(data: data) else { return }
+                posters.append(image)
+            }
+        }
+        self.posters = posters
     }
 }

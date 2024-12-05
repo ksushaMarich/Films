@@ -44,8 +44,9 @@ extension StartViewController: StartViewDelegate {
     func didTapSearchButton(with text: String) {
         let networkManager = NetworkManager.shared
         networkManager.searchMovies(query: text)
+        networkManager.downloadPosters()
         guard let error = networkManager.error else {
-            navigationController?.pushViewController(RespondViewController(movies: networkManager.movies), animated: true)
+            navigationController?.pushViewController(FoundMoviesViewController(movies: networkManager.movies, postersImages: networkManager.posters), animated: true)
             return
         }
         print(error)

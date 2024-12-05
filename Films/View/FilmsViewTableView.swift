@@ -34,7 +34,7 @@ class FilmsViewTableView: UITableView {
 extension FilmsViewTableView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = dequeueReusableCell(withIdentifier: FilmViewCell.identifier, for: indexPath) as? FilmViewCell else { return UITableViewCell() }
-        cell.configuring(with: movies[indexPath.row])
+        cell.configuring(movie: movies[indexPath.row], poster: postorders[indexPath.row])
         return cell
     }
     

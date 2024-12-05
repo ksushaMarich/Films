@@ -21,12 +21,12 @@ class FilmViewCell: UITableViewCell {
         return label
     }()
     
-    private lazy var overviewLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        return label
+    private lazy var posterImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
     }()
     
     //MARK: - init
@@ -42,18 +42,25 @@ class FilmViewCell: UITableViewCell {
     
     //MARK: - setup view method
     private func setupView() {
+        let inset = CGFloat(16)
         contentView.addSubview(titleLabel)
+        contentView.addSubview(posterImageView)
+        
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            
+            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: inset),
+            posterImageView.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor),
+            posterImageView.heightAnchor.constraint(equalToConstant: 200),
+            
         ])
     }
     
     //MARK: - configuring cell method
-    func configuring(with movie: Movie) {
+    func configuring(movie: Movie, poster: UIImage) {
         titleLabel.text = movie.title
-        overviewLabel.text = movie.overview
+        posterImageView.image = poster
     }
 }
