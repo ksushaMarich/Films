@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RespondTableViewCell: UITableViewCell {
+class FilmViewCell: UITableViewCell {
 
     //MARK: - naming
     static let identifier = "RespondTableViewCell"
@@ -16,12 +16,23 @@ class RespondTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private lazy var overviewLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
     }()
     
     //MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupView()
         
     }
     
@@ -36,13 +47,13 @@ class RespondTableViewCell: UITableViewCell {
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: 50)
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
         ])
     }
     
     //MARK: - configuring cell method
     func configuring(with movie: Movie) {
         titleLabel.text = movie.title
+        overviewLabel.text = movie.overview
     }
 }

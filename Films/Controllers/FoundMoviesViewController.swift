@@ -7,20 +7,22 @@
 
 import UIKit
 
-class RespondViewController: UIViewController {
+class FoundMoviesViewController: UIViewController {
     
     //MARK: - naming
     let movies: [Movie]
+    let postersImages: [UIImage?]
     
-    private lazy var respondTableView: RespondTableView = {
-        let tableView = RespondTableView(movies: movies)
+    private lazy var respondTableView: FilmsViewTableView = {
+        let tableView = FilmsViewTableView(movies: movies)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
     //MARK: - init
-    init(movies: [Movie]) {
+    init(movies: [Movie], postersImages: [UIImage?]) {
         self.movies = movies
+        self.postersImages = postersImages
         super.init(nibName: nil, bundle: nil)
         setupView()
     }

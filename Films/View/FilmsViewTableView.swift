@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RespondTableView: UITableView {
+class FilmsViewTableView: UITableView {
 
     //MARK: - naming
     let movies: [Movie]
@@ -19,8 +19,8 @@ class RespondTableView: UITableView {
         backgroundColor = .yellow
         delegate = self
         dataSource = self
-        separatorColor = .clear
-        register(RespondTableViewCell.self, forCellReuseIdentifier: RespondTableViewCell.identifier)
+//        separatorColor = .clear
+        register(FilmViewCell.self, forCellReuseIdentifier: FilmViewCell.identifier)
         allowsSelection = false
     }
     
@@ -31,9 +31,9 @@ class RespondTableView: UITableView {
     //MARK: - setupView methods
 }
 
-extension RespondTableView: UITableViewDelegate, UITableViewDataSource {
+extension FilmsViewTableView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = dequeueReusableCell(withIdentifier: RespondTableViewCell.identifier, for: indexPath) as? RespondTableViewCell else { return UITableViewCell() }
+        guard let cell = dequeueReusableCell(withIdentifier: FilmViewCell.identifier, for: indexPath) as? FilmViewCell else { return UITableViewCell() }
         cell.configuring(with: movies[indexPath.row])
         return cell
     }
