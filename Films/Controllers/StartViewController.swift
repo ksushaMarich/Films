@@ -23,7 +23,6 @@ class StartViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        NetworkManager.shared.searchMovies(query: "убить била")
     }
     
     //MARK: - setupViewMethods

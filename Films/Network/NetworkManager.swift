@@ -15,12 +15,7 @@ struct Movie: Codable, Identifiable {
     let id: Int
     let title: String
     let overview: String
-    let posterPath: String?
-
-    var posterURL: URL? {
-        guard let path = posterPath else { return nil }
-        return URL(string: "https://image.tmdb.org/t/p/w500\(path)")
-    }
+    let poster_path: String
 }
 
 class NetworkManager {
@@ -43,6 +38,28 @@ class NetworkManager {
             self.error = "url is not found"
             return
         }
+
+//        // Создаем задачу для отправки запроса
+//        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+//            if let error = error {
+//                print("Ошибка: \(error.localizedDescription)") // Если есть ошибка, выводим её
+//                return
+//            }
+//
+//            // Убедимся, что данные получены
+//            guard let data = data else {
+//                print("Нет данных")
+//                return
+//            }
+//
+//            // Преобразуем данные в текст и печатаем
+//            if let jsonString = String(data: data, encoding: .utf8) {
+//                print("Ответ сервера: \(jsonString)")
+//            }
+//        }
+//
+//        // Запускаем задачу
+//        task.resume()
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
@@ -54,7 +71,6 @@ class NetworkManager {
                 self.error = "Нет данных"
                 return
             }
-            print(data)
             
             do {
                 let response = try JSONDecoder().decode(MovieResponse.self, from: data)
@@ -64,6 +80,7 @@ class NetworkManager {
                     movies.append(movie)
                 }
                 self.movies = movies
+                movies = []
                 
             } catch {
                 self.error = "Ошибка парсинга"
@@ -76,7 +93,8 @@ class NetworkManager {
         var posters: [UIImage?] = []
         
         for movie in movies {
-            guard let url = movie.posterURL else {
+            
+            guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(movie.poster_path)") else {
                 self.error = "url poster URL is not found "
                 return
             }
@@ -91,5 +109,6 @@ class NetworkManager {
             }
         }
         self.posters = posters
+        posters = []
     }
 }

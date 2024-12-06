@@ -21,7 +21,6 @@ class FilmsViewTableView: UITableView {
         backgroundColor = .yellow
         delegate = self
         dataSource = self
-//        separatorColor = .clear
         register(FilmViewCell.self, forCellReuseIdentifier: FilmViewCell.identifier)
         allowsSelection = false
     }

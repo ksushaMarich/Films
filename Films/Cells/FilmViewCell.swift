@@ -32,6 +32,7 @@ class FilmViewCell: UITableViewCell {
     //MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .red
         setupView()
         
     }
@@ -44,16 +45,18 @@ class FilmViewCell: UITableViewCell {
     private func setupView() {
         let inset = CGFloat(16)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(posterImageView)
+//        contentView.addSubview(posterImageView)
         
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             
-            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: inset),
-            posterImageView.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor),
-            posterImageView.heightAnchor.constraint(equalToConstant: 200),
+//            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: inset),
+//            posterImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: inset),
+//            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+//            posterImageView.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor),
+//            posterImageView.heightAnchor.constraint(equalToConstant: 200),
             
         ])
     }
