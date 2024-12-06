@@ -75,12 +75,8 @@ class NetworkManager {
             do {
                 let response = try JSONDecoder().decode(MovieResponse.self, from: data)
                 self.response = response
-                var movies: [Movie] = []
-                for movie in response.results {
-                    movies.append(movie)
-                }
-                self.movies = movies
-                movies = []
+                self.movies = response.results
+                print(self.movies)
                 
             } catch {
                 self.error = "Ошибка парсинга"
@@ -89,26 +85,25 @@ class NetworkManager {
         }.resume()
     }
     
-    func downloadPosters() {
-        var posters: [UIImage?] = []
-        
-        for movie in movies {
-            
-            guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(movie.poster_path)") else {
-                self.error = "url poster URL is not found "
-                return
-            }
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                if let error = error {
-                    self.error = " Ошибка загрузки изображения: \(error.localizedDescription)"
-                    posters.append(nil)
-                    return
-                }
-                guard let data = data, let image = UIImage(data: data) else { return }
-                posters.append(image)
-            }
-        }
-        self.posters = posters
-        posters = []
-    }
+//    func downloadPosters() {
+//        var posters: [UIImage?] = []
+//        
+//        for movie in movies {
+//            
+//            guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(movie.poster_path)") else {
+//                self.error = "url poster URL is not found "
+//                return
+//            }
+//            URLSession.shared.dataTask(with: url) { data, response, error in
+//                if let error = error {
+//                    self.error = " Ошибка загрузки изображения: \(error.localizedDescription)"
+//                    posters.append(nil)
+//                    return
+//                }
+//                guard let data = data, let image = UIImage(data: data) else { return }
+//                posters.append(image)
+//            }
+//        }
+//        self.posters = posters
+//    }
 }

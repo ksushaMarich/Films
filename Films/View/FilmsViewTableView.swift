@@ -23,6 +23,7 @@ class FilmsViewTableView: UITableView {
         dataSource = self
         register(FilmViewCell.self, forCellReuseIdentifier: FilmViewCell.identifier)
         allowsSelection = false
+        print(movies)
     }
     
     required init?(coder: NSCoder) {
