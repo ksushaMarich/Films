@@ -62,8 +62,11 @@ class FilmViewCell: UITableViewCell {
     }
     
     //MARK: - configuring cell method
-    func configuring(movie: Movie, posers: UIImage) {
+    func configuring(movie: Movie) {
         titleLabel.text = movie.title
-        posterImageView.image = posers
+        Task {
+            let image = try await NetworkManager.shared.downloadPoster(from: movie)
+            posterImageView.image = image
+        }
     }
 }

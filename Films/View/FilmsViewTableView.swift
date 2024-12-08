@@ -13,12 +13,10 @@ class FilmsViewTableView: UITableView {
     private lazy var networkManager = NetworkManager.shared
     
     private let movies: [Movie]
-    private let posters: [UIImage]
     
     //MARK: - init
-    init(movies: [Movie], posters: [UIImage]) {
+    init(movies: [Movie]) {
         self.movies = movies
-        self.posters = posters
         super.init(frame: .zero, style: UITableView.Style.plain)
         backgroundColor = .yellow
         delegate = self
@@ -37,7 +35,7 @@ class FilmsViewTableView: UITableView {
 extension FilmsViewTableView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = dequeueReusableCell(withIdentifier: FilmViewCell.identifier, for: indexPath) as? FilmViewCell else { return UITableViewCell() }
-        cell.configuring(movie: movies[indexPath.row], posers: posters[indexPath.row])
+        cell.configuring(movie: movies[indexPath.row])
         return cell
     }
     

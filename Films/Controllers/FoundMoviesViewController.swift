@@ -11,18 +11,16 @@ class FoundMoviesViewController: UIViewController {
     
     //MARK: - naming
     private let movies: [Movie]
-    private let posters: [UIImage]
     
     private lazy var FoundTableView: FilmsViewTableView = {
-        let tableView = FilmsViewTableView(movies: movies, posters: posters)
+        let tableView = FilmsViewTableView(movies: movies)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
     //MARK: - init
-    init(movies: [Movie], posters: [UIImage]) {
+    init(movies: [Movie]) {
         self.movies = movies
-        self.posters = posters
         super.init(nibName: nil, bundle: nil)
         setupView()
     }

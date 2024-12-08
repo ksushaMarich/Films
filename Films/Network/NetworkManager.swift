@@ -37,23 +37,19 @@ class NetworkManager {
         return []
     }
     
-    func downloadPoster(from movies: [Movie]) async throws -> [UIImage] {
-        var posters: [UIImage] = []
+    func downloadPoster(from movie: Movie) async throws -> UIImage {
+        var posterImage = UIImage(named: "PosterError")!
         
-        for movie in movies {
-            guard let poster = movie.poster, let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster)") else {
-                posters.append(UIImage(named: "PosterError")!)
-                continue
-            }
-            
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let image = UIImage(data: data)
-            guard let image else {
-                posters .append(UIImage(named: "PosterError")!)
-                continue
-            }
-            posters.append(image)
+        guard let poster = movie.poster, let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster)") else {
+            return posterImage
         }
-        return posters
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let image = UIImage(data: data)
+        guard let image else {
+            return posterImage
+        }
+        posterImage = image
+        return posterImage
     }
 }

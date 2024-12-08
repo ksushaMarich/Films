@@ -47,8 +47,7 @@ extension StartViewController: StartViewDelegate {
         
         Task {
             let movies = try await networkManager.searchMovies(query: text)
-            let posters = try await networkManager.downloadPosters(from: movies)
-            navigationController?.pushViewController(FoundMoviesViewController(movies: movies, posters: posters), animated: true)
+            navigationController?.pushViewController(FoundMoviesViewController(movies: movies), animated: true)
         }
     }
 }
