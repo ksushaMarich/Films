@@ -10,15 +10,19 @@ import UIKit
 class FoundMoviesViewController: UIViewController {
     
     //MARK: - naming
+    private let movies: [Movie]
+    private let posters: [UIImage]
     
-    private lazy var respondTableView: FilmsViewTableView = {
-        let tableView = FilmsViewTableView()
+    private lazy var FoundTableView: FilmsViewTableView = {
+        let tableView = FilmsViewTableView(movies: movies, posters: posters)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
     //MARK: - init
-    init() {
+    init(movies: [Movie], posters: [UIImage]) {
+        self.movies = movies
+        self.posters = posters
         super.init(nibName: nil, bundle: nil)
         setupView()
     }
@@ -29,12 +33,12 @@ class FoundMoviesViewController: UIViewController {
     
     //MARK: - setup view methods
     private func setupView() {
-        view.addSubview(respondTableView)
+        view.addSubview(FoundTableView)
         NSLayoutConstraint.activate([
-            respondTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            respondTableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            respondTableView.topAnchor.constraint(equalTo: view.topAnchor),
-            respondTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+            FoundTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            FoundTableView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            FoundTableView.topAnchor.constraint(equalTo: view.topAnchor),
+            FoundTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         ])
     }
 }

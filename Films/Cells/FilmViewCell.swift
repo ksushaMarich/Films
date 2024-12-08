@@ -10,7 +10,7 @@ import UIKit
 class FilmViewCell: UITableViewCell {
 
     //MARK: - naming
-    static let identifier = "RespondTableViewCell"
+    static let identifier = "FilmViewCell"
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -45,26 +45,25 @@ class FilmViewCell: UITableViewCell {
     private func setupView() {
         let inset = CGFloat(16)
         contentView.addSubview(titleLabel)
-//        contentView.addSubview(posterImageView)
+        contentView.addSubview(posterImageView)
         
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             
-//            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: inset),
-//            posterImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: inset),
-//            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-//            posterImageView.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor),
-//            posterImageView.heightAnchor.constraint(equalToConstant: 200),
+            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: inset),
+            posterImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: inset),
+            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            posterImageView.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor),
+            posterImageView.heightAnchor.constraint(equalToConstant: 200),
             
         ])
     }
     
     //MARK: - configuring cell method
-    func configuring(movie: Movie, poster: UIImage?) {
+    func configuring(movie: Movie, posers: UIImage) {
         titleLabel.text = movie.title
-        guard let poster = poster else { return }
-        posterImageView.image = poster
+        posterImageView.image = posers
     }
 }

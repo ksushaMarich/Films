@@ -40,15 +40,16 @@ class StartViewController: UIViewController {
 }
 
 extension StartViewController: StartViewDelegate {
+    
     func didTapSearchButton(with text: String) {
+        
         let networkManager = NetworkManager.shared
-        networkManager.searchMovies(query: text)
-//        networkManager.downloadPosters()
-        guard let error = networkManager.error else {
-            navigationController?.pushViewController(FoundMoviesViewController(), animated: true)
-            return
+        
+        Task {
+            let movies = try await networkManager.searchMovies(query: text)
+            let posters = try await networkManager.downloadPosters(from: movies)
+            navigationController?.pushViewController(FoundMoviesViewController(movies: movies, posters: posters), animated: true)
         }
-        print(error)
     }
 }
 

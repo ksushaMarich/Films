@@ -70,8 +70,7 @@ class StartView: UIView {
     
     //MARK: - button methods
     @objc func search() {
-        if let string = textField.text {
-            delegate?.didTapSearchButton(with: string)
-        }
+        guard let query = textField.text else { return }
+        delegate?.didTapSearchButton(with: query)
     }
 }

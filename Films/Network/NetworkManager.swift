@@ -7,103 +7,53 @@
 
 import UIKit
 
-struct MovieResponse: Codable{
-    let results: [Movie]
-}
-
-struct Movie: Codable, Identifiable {
-    let id: Int
-    let title: String
-    let overview: String
-    let poster_path: String
-}
-
 class NetworkManager {
+    
     static let shared = NetworkManager()
+    
     private let apiKey = "5e491b5e3a7e7c82df6c07d1c7448db1"
     private let baseURL = "https://api.themoviedb.org/3"
     private let language = "ru-RU"
-    private var response: MovieResponse?
-    var error: String?
     
-    var movies: [Movie] = []
-    var posters: [UIImage?] = []
+    enum APIError: Error {
+        case invalidURL
+        case serverError
+        case decodingError
+    }
     
     private init() {}
 
-    func searchMovies(query: String) {
-        let urlString = "\(baseURL)/search/movie?api_key=\(apiKey)&query=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&language=\(language)"
+    func searchMovies(query: String) async throws -> [Movie] {
         
-        guard let url = URL(string: urlString) else {
-            self.error = "url is not found"
-            return
-        }
-
-//        // Создаем задачу для отправки запроса
-//        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-//            if let error = error {
-//                print("Ошибка: \(error.localizedDescription)") // Если есть ошибка, выводим её
-//                return
-//            }
-//
-//            // Убедимся, что данные получены
-//            guard let data = data else {
-//                print("Нет данных")
-//                return
-//            }
-//
-//            // Преобразуем данные в текст и печатаем
-//            if let jsonString = String(data: data, encoding: .utf8) {
-//                print("Ответ сервера: \(jsonString)")
-//            }
-//        }
-//
-//        // Запускаем задачу
-//        task.resume()
+        let path = "\(baseURL)/search/movie?api_key=\(apiKey)&query=\(query)&language=\(language)"
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                self.error = "Ошибка  \(error.localizedDescription)"
-                return
-            }
-            
-            guard let data = data else {
-                self.error = "Нет данных"
-                return
-            }
-            
-            do {
-                let response = try JSONDecoder().decode(MovieResponse.self, from: data)
-                self.response = response
-                self.movies = response.results
-                print(self.movies)
-                
-            } catch {
-                self.error = "Ошибка парсинга"
-                return
-            }
-        }.resume()
+        guard let url = URL(string: path) else { throw APIError.invalidURL }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return (try JSONDecoder().decode(MovieResponse.self, from: data)).results
+        } catch { print(error) }
+        
+        return []
     }
     
-//    func downloadPosters() {
-//        var posters: [UIImage?] = []
-//        
-//        for movie in movies {
-//            
-//            guard let url = URL(string: "https://image.tmdb.org/t/p/w500\(movie.poster_path)") else {
-//                self.error = "url poster URL is not found "
-//                return
-//            }
-//            URLSession.shared.dataTask(with: url) { data, response, error in
-//                if let error = error {
-//                    self.error = " Ошибка загрузки изображения: \(error.localizedDescription)"
-//                    posters.append(nil)
-//                    return
-//                }
-//                guard let data = data, let image = UIImage(data: data) else { return }
-//                posters.append(image)
-//            }
-//        }
-//        self.posters = posters
-//    }
+    func downloadPoster(from movies: [Movie]) async throws -> [UIImage] {
+        var posters: [UIImage] = []
+        
+        for movie in movies {
+            guard let poster = movie.poster, let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster)") else {
+                posters.append(UIImage(named: "PosterError")!)
+                continue
+            }
+            
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let image = UIImage(data: data)
+            guard let image else {
+                posters .append(UIImage(named: "PosterError")!)
+                continue
+            }
+            posters.append(image)
+        }
+        return posters
+    }
 }
