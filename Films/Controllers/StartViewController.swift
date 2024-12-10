@@ -10,10 +10,10 @@ import UIKit
 class StartViewController: UIViewController {
     
     //MARK: - naming
+    private let popularMovies: [Movie]
     
-    private lazy var mainView: StartView = {
-        let view = StartView()
-        view.delegate = self
+    private lazy var mainView: MainTableView = {
+        let view = MainTableView(movies: popularMovies)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -23,6 +23,17 @@ class StartViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+    }
+    
+    //MARK: - init
+    
+    init(popularMovies: [Movie]) {
+        self.popularMovies = popularMovies
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     //MARK: - setupViewMethods
@@ -36,19 +47,6 @@ class StartViewController: UIViewController {
             mainView.topAnchor.constraint(equalTo: view.topAnchor),
             mainView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         ])
-    }
-}
-
-extension StartViewController: StartViewDelegate {
-    
-    func didTapSearchButton(with text: String) {
-        
-        let networkManager = NetworkManager.shared
-        
-        Task {
-            let movies = try await networkManager.searchMovies(query: text)
-            navigationController?.pushViewController(FoundMoviesViewController(movies: movies), animated: true)
-        }
     }
 }
 

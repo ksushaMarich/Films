@@ -12,8 +12,8 @@ class FoundMoviesViewController: UIViewController {
     //MARK: - naming
     private let movies: [Movie]
     
-    private lazy var FoundTableView: FilmsViewTableView = {
-        let tableView = FilmsViewTableView(movies: movies)
+    private lazy var FoundTableView: MainTableView = {
+        let tableView = MainTableView(movies: movies)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()

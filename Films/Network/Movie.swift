@@ -7,6 +7,13 @@
 
 import Foundation
 
+enum APIError: Error {
+    case invalidURL
+    case serverError
+    case decodingError
+    case emptyMovies
+}
+
 struct MovieResponse: Decodable {
     let results: [Movie]
 }

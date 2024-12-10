@@ -15,15 +15,23 @@ class NetworkManager {
     private let baseURL = "https://api.themoviedb.org/3"
     private let language = "ru-RU"
     
-    enum APIError: Error {
-        case invalidURL
-        case serverError
-        case decodingError
-    }
-    
     private init() {}
+    
+    func searchPopularMovies() async throws -> [Movie] {
+        
+        let path = "\(baseURL)/search/movie?api_key=\(apiKey)&query=\("Убить Билла")&language=\(language)"
+        
+        guard let url = URL(string: path) else { throw APIError.invalidURL }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return (try JSONDecoder().decode(MovieResponse.self, from: data)).results
+        } catch { print(error) }
+        
+        return []
+    }
 
-    func searchMovies(query: String) async throws -> [Movie] {
+    func searchMoviesFromQuery(query: String) async throws -> [Movie] {
         
         let path = "\(baseURL)/search/movie?api_key=\(apiKey)&query=\(query)&language=\(language)"
         

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FilmsViewTableView: UITableView {
+class MainTableView: UITableView {
 
     //MARK: - naming
     private lazy var networkManager = NetworkManager.shared
@@ -21,6 +21,7 @@ class FilmsViewTableView: UITableView {
         backgroundColor = .yellow
         delegate = self
         dataSource = self
+        register(SearchCell.self, forCellReuseIdentifier: SearchCell.identifier)
         register(FilmViewCell.self, forCellReuseIdentifier: FilmViewCell.identifier)
         allowsSelection = false
     }
@@ -30,15 +31,22 @@ class FilmsViewTableView: UITableView {
     }
     
     //MARK: - setupView methods
+    
 }
 
-extension FilmsViewTableView: UITableViewDelegate, UITableViewDataSource {
+extension MainTableView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = dequeueReusableCell(withIdentifier: FilmViewCell.identifier, for: indexPath) as? FilmViewCell else { return UITableViewCell() }
-        cell.configuring(movie: movies[indexPath.row])
+        
+        guard indexPath.row == 0 else {
+            guard let cell = dequeueReusableCell(withIdentifier: FilmViewCell.identifier, for: indexPath) as? FilmViewCell else { return UITableViewCell() }
+            cell.configuring(movie: movies[indexPath.row - 1])
+            return cell
+        }
+        guard let cell = dequeueReusableCell(withIdentifier: SearchCell.identifier, for: indexPath) as? SearchCell else { return UITableViewCell() }
         return cell
+        
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { movies.count }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { movies.count + 1 }
 }
 
