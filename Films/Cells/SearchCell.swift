@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SearchCellDelegate: AnyObject {
-    func update(with movies: [Movie])
+    func update(with query: String)
 }
 
 class SearchCell: UITableViewCell {
@@ -76,9 +76,7 @@ class SearchCell: UITableViewCell {
     
     @objc func search() {
         guard let query = textField.text else { return }
-        Task {
-            let movies = try await NetworkManager.shared.searchMoviesFromQuery(query: query)
-            cellDelegate?.update(with: movies)
-        }
+        cellDelegate?.update(with: query)
+        
     }
 }

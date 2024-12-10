@@ -15,6 +15,7 @@ class MainViewController: UIViewController {
     private lazy var mainView: MainTableView = {
         let view = MainTableView(movies: popularMovies)
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.viewDataSource = self
         return view
     }()
     
@@ -48,5 +49,9 @@ class MainViewController: UIViewController {
             mainView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         ])
     }
+}
+
+extension MainViewController: MainTableViewDataSource {
+    var movies: [Movie] { popularMovies }
 }
 

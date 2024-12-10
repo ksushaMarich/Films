@@ -7,14 +7,14 @@
 
 import UIKit
 
-protocol MainTableViewDelegate: AnyObject {
-    func updateTableView(with movies: [Movie])
+protocol MainTableViewDataSource: AnyObject {
+    var movies: [Movie] { get }
 }
 
 class MainTableView: UITableView {
 
     //MARK: - naming
-    weak var viewDelegate: MainTableViewDelegate?
+    weak var viewDataSource: MainTableViewDataSource?
     
     private lazy var networkManager = NetworkManager.shared
     
@@ -58,9 +58,19 @@ extension MainTableView: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension MainTableView: SearchCellDelegate {
-    func update(with movies: [Movie]) {
-        self.movies = movies
-        reloadData()
+    func update(with query: String) {
+        
+        guard query != "" else {
+            guard let movies = viewDataSource?.movies else { return }
+            self.movies = movies
+            reloadData()
+            return
+        }
+        Task {
+            let movies = try await NetworkManager.shared.searchMoviesFromQuery(query: query)
+            self.movies = movies
+            reloadData()
+        }
     }
 }
 
