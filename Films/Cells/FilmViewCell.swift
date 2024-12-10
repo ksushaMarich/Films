@@ -17,6 +17,7 @@ class FilmViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textAlignment = .center
         label.numberOfLines = 0
         return label
     }()
@@ -24,7 +25,7 @@ class FilmViewCell: UITableViewCell {
     private lazy var posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -55,8 +56,7 @@ class FilmViewCell: UITableViewCell {
             posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: inset),
             posterImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: inset),
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            posterImageView.leadingAnchor.constraint(equalTo: posterImageView.leadingAnchor),
-            posterImageView.heightAnchor.constraint(equalToConstant: 200),
+            posterImageView.heightAnchor.constraint(equalToConstant: 450),
             
         ])
     }

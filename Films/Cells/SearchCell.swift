@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SearchCellDelegate: AnyObject {
-    func update(with query: [Movie])
+    func update(with movies: [Movie])
 }
 
 class SearchCell: UITableViewCell {
@@ -67,7 +67,7 @@ class SearchCell: UITableViewCell {
             searchButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
             searchButton.topAnchor.constraint(equalTo: textField.topAnchor),
             searchButton.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: inset),
-            searchButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: inset),
+            searchButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
             searchButton.widthAnchor.constraint(equalTo: searchButton.heightAnchor)
             ])
     }

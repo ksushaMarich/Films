@@ -7,12 +7,18 @@
 
 import UIKit
 
+protocol MainTableViewDelegate: AnyObject {
+    func updateTableView(with movies: [Movie])
+}
+
 class MainTableView: UITableView {
 
     //MARK: - naming
+    weak var viewDelegate: MainTableViewDelegate?
+    
     private lazy var networkManager = NetworkManager.shared
     
-    private let movies: [Movie]
+    private var movies: [Movie]
     
     //MARK: - init
     init(movies: [Movie]) {
@@ -43,10 +49,18 @@ extension MainTableView: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
         guard let cell = dequeueReusableCell(withIdentifier: SearchCell.identifier, for: indexPath) as? SearchCell else { return UITableViewCell() }
+        cell.cellDelegate = self
         return cell
         
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { movies.count + 1 }
+}
+
+extension MainTableView: SearchCellDelegate {
+    func update(with movies: [Movie]) {
+        self.movies = movies
+        reloadData()
+    }
 }
 

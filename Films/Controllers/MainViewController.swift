@@ -7,7 +7,7 @@
 
 import UIKit
 
-class StartViewController: UIViewController {
+class MainViewController: UIViewController {
     
     //MARK: - naming
     private let popularMovies: [Movie]

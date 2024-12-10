@@ -25,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         Task {
             let movies = try await NetworkManager.shared.searchPopularMovies()
             window?.rootViewController = UINavigationController(
-                rootViewController: StartViewController(popularMovies: movies)
+                rootViewController: MainViewController(popularMovies: movies)
             )
         }
         window?.makeKeyAndVisible()
