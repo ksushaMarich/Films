@@ -18,8 +18,10 @@ class NetworkManager {
     private init() {}
     
     func searchPopularMovies() async throws -> [Movie] {
+//        https://api.themoviedb.org/3/movie/popular?api_key=ВАШ_API_КЛЮЧ
+//        let path = "\(baseURL)/search/movie?api_key=\(apiKey)&query=\("Убить Билла")&language=\(language)"
         
-        let path = "\(baseURL)/search/movie?api_key=\(apiKey)&query=\("Убить Билла")&language=\(language)"
+        let path = "\(baseURL)/movie/popular?api_key=\(apiKey)&language=\(language)"
         
         guard let url = URL(string: path) else { throw APIError.invalidURL }
         
