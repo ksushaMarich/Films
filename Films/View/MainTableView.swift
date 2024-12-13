@@ -36,8 +36,12 @@ class MainTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - setupView methods
-    
+    //MARK: - reloadData methods
+    private func updateWithPopularMovies() {
+        guard let movies = self.viewDataSource?.movies else { return }
+        self.movies = movies
+        self.reloadData()
+    }
 }
 
 extension MainTableView: UITableViewDelegate, UITableViewDataSource {
@@ -58,18 +62,36 @@ extension MainTableView: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension MainTableView: SearchCellDelegate {
+    
     func update(with query: String) {
         
         guard query != "" else {
-            guard let movies = viewDataSource?.movies else { return }
-            self.movies = movies
-            reloadData()
+            updateWithPopularMovies()
             return
         }
         Task {
             let movies = try await NetworkManager.shared.searchMoviesFromQuery(query: query)
             self.movies = movies
             reloadData()
+        }
+    }
+    
+    func update2(with query: String) {
+        guard query != "" else {
+            updateWithPopularMovies()
+            return
+        }
+        networkManager.searchMoviesFromQuery2(query: query) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let movies):
+                    self.movies = movies
+                    self.reloadData()
+                case .failure(let error):
+                    print("Ошибка: \(error.localizedDescription)")
+                    self.updateWithPopularMovies()
+                }
+            }
         }
     }
 }

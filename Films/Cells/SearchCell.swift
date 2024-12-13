@@ -9,6 +9,7 @@ import UIKit
 
 protocol SearchCellDelegate: AnyObject {
     func update(with query: String)
+    func update2(with query: String)
 }
 
 class SearchCell: UITableViewCell {
@@ -39,6 +40,19 @@ class SearchCell: UITableViewCell {
         return button
     }()
     
+    private lazy var searchButton2: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(search), for: .touchUpInside)
+        button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
+        button.backgroundColor = .black
+        button.tintColor = .white
+        button.setTitleColor(.black, for: .normal)
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 5
+        return button
+    }()
+    
     //MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -57,6 +71,7 @@ class SearchCell: UITableViewCell {
         let inset = CGFloat(10)
         contentView.addSubview(textField)
         contentView.addSubview(searchButton)
+        contentView.addSubview(searchButton2)
         
         NSLayoutConstraint.activate([
             textField.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
@@ -67,8 +82,14 @@ class SearchCell: UITableViewCell {
             searchButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
             searchButton.topAnchor.constraint(equalTo: textField.topAnchor),
             searchButton.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: inset),
-            searchButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
-            searchButton.widthAnchor.constraint(equalTo: searchButton.heightAnchor)
+            searchButton.widthAnchor.constraint(equalTo: searchButton.heightAnchor),
+            
+            searchButton2.centerYAnchor.constraint(equalTo: searchButton.centerYAnchor),
+            searchButton2.topAnchor.constraint(equalTo: searchButton.topAnchor),
+            searchButton2.leadingAnchor.constraint(equalTo: searchButton.trailingAnchor, constant: inset),
+            searchButton2.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
+            searchButton2.widthAnchor.constraint(equalTo: searchButton.heightAnchor)
+            
             ])
     }
     
@@ -77,6 +98,11 @@ class SearchCell: UITableViewCell {
     @objc func search() {
         guard let query = textField.text else { return }
         cellDelegate?.update(with: query)
+        
+    }
+    @objc func search2() {
+        guard let query = textField.text else { return }
+        cellDelegate?.update2(with: query)
         
     }
 }
