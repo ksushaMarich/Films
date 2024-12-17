@@ -9,6 +9,7 @@ import Foundation
 
 enum APIError: Error {
     case invalidURL
+    case noData
     case serverError
     case decodingError
     case emptyMovies

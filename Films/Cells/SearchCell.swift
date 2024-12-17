@@ -9,7 +9,6 @@ import UIKit
 
 protocol SearchCellDelegate: AnyObject {
     func update(with query: String)
-    func update2(with query: String)
 }
 
 class SearchCell: UITableViewCell {
@@ -98,11 +97,6 @@ class SearchCell: UITableViewCell {
     @objc func search() {
         guard let query = textField.text else { return }
         cellDelegate?.update(with: query)
-        
-    }
-    @objc func search2() {
-        guard let query = textField.text else { return }
-        cellDelegate?.update2(with: query)
         
     }
 }

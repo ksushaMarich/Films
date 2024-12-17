@@ -17,22 +17,32 @@ class NetworkManager {
     
     private init() {}
             
-    private func giveURLComponents(isPopular: Bool) -> URLComponents {
+    private func formURL(query: String?) -> URL? {
+        
         var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "api.themoviedb.org"
-        urlComponents.path = isPopular ? "/3/movie/popular" : "/3/search/movie"
-        urlComponents.queryItems = [
+        
+        var queryItems = [
             URLQueryItem(name: "api_key", value: apiKey),
             URLQueryItem(name: "language", value: language)]
-        return urlComponents
+        
+        urlComponents.scheme = "https"
+        urlComponents.host = "api.themoviedb.org"
+        
+        urlComponents.path = "/3/movie/popular"
+        
+        if let query = query {
+            urlComponents.path = "/3/search/movie"
+            queryItems += [URLQueryItem(name: "query", value: query)]
+        }
+        
+        urlComponents.queryItems = queryItems
+        
+        return urlComponents.url
     }
     
-    func searchPopularMovies() async throws -> [Movie] {
-        //        https://api.themoviedb.org/3/movie/popular?api_key=ВАШ_API_КЛЮЧ
-        //        let path = "\(baseURL)/search/movie?api_key=\(apiKey)&query=\("Убить Билла")&language=\(language)"
+    func searchMovies(query: String? = nil) async throws -> [Movie] {
         
-        guard let url = giveURLComponents(isPopular: true).url else { throw APIError.invalidURL }
+        guard let url = formURL(query: query) else { throw APIError.invalidURL }
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
@@ -42,63 +52,45 @@ class NetworkManager {
         return []
     }
     
-    func searchMoviesFromQuery(query: String) async throws -> [Movie] {
+    func downloadPoster(for movie: Movie) async throws -> UIImage {
         
-        let path = "\(baseURL)/search/movie?api_key=\(apiKey)&query=\(query)&language=\(language)"
-        print(path)
+        let posterImage = UIImage(named: "PosterError")!
         
-        guard let url = URL(string: path) else { throw APIError.invalidURL }
+        guard let poster = movie.poster, let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster)") else {
+            return posterImage
+        }
         
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            return (try JSONDecoder().decode(MovieResponse.self, from: data)).results
-        } catch { print(error) }
+        let (data, _) = try await URLSession.shared.data(from: url)
         
-        return []
+        return UIImage(data: data) ?? posterImage
     }
     
-        func searchMoviesFromQuery2(query: String, completion: @escaping (Result<[Movie], Error>) -> Void) {
+    func searchMoviesWithClosure(for query: String, completion: @escaping (Result<[Movie], Error>) -> Void) {
+        
+        guard let url = formURL(query: query) else {
+            completion(.failure(APIError.invalidURL))
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
             
-            let path = "\(baseURL)/search/movie?api_key=\(apiKey)&query=\(query)&language=\(language)"
-            
-            guard let url = URL(string: path) else {
-                completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
+            if let error {
+                completion(.failure(error))
                 return
             }
             
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                
-                guard let data = data else {
-                    completion(.failure(NSError(domain: "No Data", code: -1, userInfo: nil)))
-                    return
-                }
-                
-                do {
-                    let rsponse = try JSONDecoder().decode(MovieResponse.self, from: data)
-                    completion(.success(rsponse.results))
-                } catch  {
-                    completion(.failure(error))
-                }
-            }.resume()
-        }
-        
-        func downloadPoster(from movie: Movie) async throws -> UIImage {
-            var posterImage = UIImage(named: "PosterError")!
-            
-            guard let poster = movie.poster, let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster)") else {
-                return posterImage
+            guard let data else {
+                completion(.failure(APIError.noData))
+                return
             }
             
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let image = UIImage(data: data)
-            guard let image else {
-                return posterImage
+            do {
+                let results = (try JSONDecoder().decode(MovieResponse.self, from: data)).results
+                DispatchQueue.main.async { completion(.success(results)) }
+            } catch  {
+                completion(.failure(error))
             }
-            posterImage = image
-            return posterImage
-        }
+            
+        }.resume()
+    }
 }

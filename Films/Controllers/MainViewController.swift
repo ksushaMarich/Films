@@ -10,12 +10,12 @@ import UIKit
 class MainViewController: UIViewController {
     
     //MARK: - naming
-    private let popularMovies: [Movie]
+    private var popularMovies: [Movie]?
     
     private lazy var mainView: MainTableView = {
-        let view = MainTableView(movies: popularMovies)
+        let view = MainTableView(movies: popularMovies ?? [])
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.viewDataSource = self
+        view.moviesDataSource = self
         return view
     }()
     
@@ -23,18 +23,10 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-    }
-    
-    //MARK: - init
-    
-    init(popularMovies: [Movie]) {
-        self.popularMovies = popularMovies
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        Task {
+            self.popularMovies = try await NetworkManager.shared.searchMovies()
+            setupView()
+        }
     }
     
     //MARK: - setupViewMethods
@@ -52,6 +44,6 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController: MainTableViewDataSource {
-    var movies: [Movie] { popularMovies }
+    var movies: [Movie] { popularMovies ?? [] }
 }
 

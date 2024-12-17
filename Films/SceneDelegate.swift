@@ -22,12 +22,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // сцена - рабочая область
         window?.windowScene = windowScene
         //добавляем корневой контролер в окно
-        Task {
-            let movies = try await NetworkManager.shared.searchPopularMovies()
-            window?.rootViewController = UINavigationController(
-                rootViewController: MainViewController(popularMovies: movies)
-            )
-        }
+       
+        window?.rootViewController = UINavigationController(
+            rootViewController: MainViewController()
+        )
+        
         window?.makeKeyAndVisible()
     }
 }

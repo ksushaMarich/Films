@@ -7,10 +7,10 @@
 
 import UIKit
 
-class FilmViewCell: UITableViewCell {
+class MovieCell: UITableViewCell {
 
     //MARK: - naming
-    static let identifier = "FilmViewCell"
+    static let identifier = "MovieCell"
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -62,10 +62,10 @@ class FilmViewCell: UITableViewCell {
     }
     
     //MARK: - configuring cell method
-    func configuring(movie: Movie) {
+    func configure(with movie: Movie) {
         titleLabel.text = movie.title
         Task {
-            let image = try await NetworkManager.shared.downloadPoster(from: movie)
+            let image = try await NetworkManager.shared.downloadPoster(for: movie)
             posterImageView.image = image
         }
     }
