@@ -65,7 +65,7 @@ extension MainTableView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { movies.count}
 }
 
-extension MainTableView: SearchCellDelegate, HeaderTableViewDelegate {
+extension MainTableView: HeaderTableViewDelegate {
     
     func search(withClosure: Bool, with query: String ) {
         guard withClosure else {
