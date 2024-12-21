@@ -9,6 +9,8 @@ import UIKit
 
 class NetworkManager {
     
+    //интерфейса пользователя (UI), который учитывает использование данных. View получает команды от Presenter и отображает данные, но ничего не знает о бизнес-логике.
+    
     static let shared = NetworkManager()
     
     private let apiKey = "5e491b5e3a7e7c82df6c07d1c7448db1"
