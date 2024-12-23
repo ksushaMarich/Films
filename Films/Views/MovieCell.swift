@@ -57,16 +57,16 @@ class MovieCell: UITableViewCell {
             posterImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: inset),
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             posterImageView.heightAnchor.constraint(equalToConstant: 450),
-            
         ])
     }
     
     //MARK: - configuring cell method
     func configure(with movie: Movie) {
+        
         titleLabel.text = movie.title
+        
         Task {
-            let image = try await NetworkManager.shared.downloadPoster(for: movie)
-            posterImageView.image = image
+            posterImageView.image = try await NetworkManager.shared.downloadPoster(for: movie)
         }
     }
 }

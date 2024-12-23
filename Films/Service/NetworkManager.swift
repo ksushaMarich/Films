@@ -13,11 +13,17 @@ class NetworkManager {
     
     static let shared = NetworkManager()
     
+    var popularMovies: [Movie] = []
+    
     private let apiKey = "5e491b5e3a7e7c82df6c07d1c7448db1"
     private let baseURL = "https://api.themoviedb.org/3"
     private let language = "ru-RU"
     
-    private init() {}
+    private init() {
+        Task {
+            popularMovies = try await searchMovies()
+        }
+    }
             
     private func formURL(query: String?) -> URL? {
         

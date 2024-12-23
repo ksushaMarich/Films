@@ -1,5 +1,5 @@
 //
-//  HeaderTableView.swift
+//  SearchHeaderView.swift
 //  Films
 //
 //  Created by Ксюша on 16.12.2024.
@@ -7,14 +7,16 @@
 
 import UIKit
 
-protocol HeaderTableViewDelegate: AnyObject {
-    func update(with query: String)
+protocol SearchHeaderViewDelegate: AnyObject {
+    func search(_ query: String)
 }
 
-class HeaderTableView: UIView {
+class SearchHeaderView: UITableViewHeaderFooterView {
     
     //MARK: - naming
-    weak var delegate: HeaderTableViewDelegate?
+    static let identifier = "SearchHeaderView"
+    
+    weak var delegate: SearchHeaderViewDelegate?
     
     private lazy var textField: UITextField = {
         let textField = UITextField()
@@ -39,8 +41,8 @@ class HeaderTableView: UIView {
     
     //MARK: - init
     init() {
-        super.init(frame: .zero)
-        backgroundColor = .blue
+        super.init(reuseIdentifier: SearchHeaderView.identifier)
+        contentView.backgroundColor = .gray
         setupView()
     }
     
@@ -66,14 +68,12 @@ class HeaderTableView: UIView {
             searchButton.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: inset),
             searchButton.widthAnchor.constraint(equalTo: searchButton.heightAnchor),
             searchButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset)
-            ])
+        ])
     }
     
     //MARK: - search method
     
     @objc func search() {
-        guard let query = textField.text else { return }
-        delegate?.update(with: query)
-        
+        delegate?.search(textField.text ?? "")
     }
 }
