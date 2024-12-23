@@ -7,26 +7,26 @@
 
 import UIKit
 
-protocol MainViewControllerDelegate: AnyObject {
-    func searchMovies(with query: String) async -> [Movie]
+protocol OutputMainViewControllerDelegate: AnyObject {
+    func searchMovies(with query: String)
 }
 
 class MainViewController: UITableViewController {
     
     //MARK: naming
     
-    weak var delegate: MainViewControllerDelegate?
+    weak var delegate: OutputMainViewControllerDelegate?
     private var presenter = MainViewPresenter()
     private lazy var networkManager = NetworkManager.shared
     
-    private var popularMovies: [Movie] { presenter.popularMovies }
-    private lazy var movies: [Movie] = popularMovies
+    private lazy var movies: [Movie] = presenter.popularMovies
     
     //MARK: life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        presenter.delegate = self
         delegate = presenter
         setupView()
     }
@@ -38,16 +38,6 @@ class MainViewController: UITableViewController {
         tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchHeaderView.identifier)
         tableView.allowsSelection = false
-    }
-    
-    private func updateWithPopularMovies() {
-        movies = popularMovies
-        tableView.reloadData()
-    }
-    
-    func searchMovies(with query: String) async -> [Movie] {
-        guard let foundMovies = await delegate?.searchMovies(with: query) else { return [] }
-        return foundMovies
     }
 }
 
@@ -78,47 +68,17 @@ extension MainViewController {
 }
 
 extension MainViewController: SearchHeaderViewDelegate {
-    
     func search(_ query: String) {
-        
-        guard !query.isEmpty/*, let foundMovies = await mainTableViewDelegate?.searchMovies(with: query) */else {
-            updateWithPopularMovies()
-            return
-        }
-        
-        //        movies = foundMovies
-        //        reloadData()
-        
-        search(withClosure: true, with: query)
-    }
-    
-    
-    // TBD
-    
-    func search(withClosure: Bool, with query: String ) {
-        
-        guard withClosure else {
-            Task {
-                let movies = try await NetworkManager.shared.searchMovies(query: query)
-                self.movies = movies
-                tableView.reloadData()
-            }
-            return
-        }
-        
-        networkManager.searchMoviesWithClosure(for: query) { result in
-            switch result {
-            case .success(let movies):
-                self.movies = movies
-                self.tableView.reloadData()
-            case .failure(let error):
-                print("Ошибка: \(error.localizedDescription)")
-                self.updateWithPopularMovies()
-            }
-        }
+        delegate?.searchMovies(with: query)
     }
 }
 
+extension MainViewController: InputMainViewControllerDelegate {
+    func update(with movies: [Movie]) {
+        self.movies = movies
+        tableView.reloadData()
+    }
+}
 
     
 

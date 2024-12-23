@@ -15,7 +15,7 @@
 //    func updateWithClosure(with query: String) {
 //        
 //        guard !query.isEmpty else {
-//            updateWithPo pularMovies()
+//            updateWithPopularMovies()
 //            return
 //        }
 //        

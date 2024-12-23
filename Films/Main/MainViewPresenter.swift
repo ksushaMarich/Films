@@ -7,9 +7,12 @@
 
 import Foundation
 
+protocol InputMainViewControllerDelegate: AnyObject {
+    func update(with movies: [Movie])
+}
+
 class MainViewPresenter {
-    //Это посредники между View и Model. Он получает пользовательские действия из View, запрашивает данные у Model и возвращает их обратно во View. Ведущий содержит всю логику приложения.
-    
+    weak var delegate: InputMainViewControllerDelegate?
     
     private let networkManager = NetworkManager.shared
     
@@ -17,15 +20,41 @@ class MainViewPresenter {
     private lazy var movies: [Movie] = []
 }
 
-extension MainViewPresenter: MainViewControllerDelegate {
-    
-    func searchMovies(with query: String) async -> [Movie] {
-        do {
-            movies = try await NetworkManager.shared.searchMovies(query: query)
-            return movies
-        } catch {
-            print("ошибка")
-            return []
+extension MainViewPresenter: OutputMainViewControllerDelegate {
+    func searchMovies(with query: String) {
+            
+            guard !query.isEmpty else {
+                delegate?.update(with: popularMovies)
+                return
+            }
+            
+            search(withClosure: true, with: query)
+        
+        
+        
+        // TBD
+        
+        func search(withClosure: Bool, with query: String ) {
+            
+            guard withClosure else {
+                Task {
+                    let movies = try await NetworkManager.shared.searchMovies(query: query)
+                    self.movies = movies
+                    delegate?.update(with: movies)
+                }
+                return
+            }
+            
+            networkManager.searchMoviesWithClosure(for: query) { result in
+                switch result {
+                case .success(let movies):
+                    self.movies = movies
+                    self.delegate?.update(with: self.movies)
+                case .failure(let error):
+                    print("Ошибка: \(error.localizedDescription)")
+                    self.delegate?.update(with: self.popularMovies)
+                }
+            }
         }
     }
 }
