@@ -7,6 +7,7 @@
 
 import Foundation
 
+#warning("Добавила новую связь")
 protocol InputMainViewControllerDelegate: AnyObject {
     func update(with movies: [Movie])
 }
@@ -16,6 +17,7 @@ class MainViewPresenter {
     
     private let networkManager = NetworkManager.shared
     
+#warning("Новое")
     lazy var popularMovies: [Movie] = networkManager.popularMovies
     private lazy var movies: [Movie] = []
 }
@@ -24,6 +26,7 @@ extension MainViewPresenter: OutputMainViewControllerDelegate {
     func searchMovies(with query: String) {
             
             guard !query.isEmpty else {
+#warning("Новое")
                 delegate?.update(with: popularMovies)
                 return
             }
@@ -35,11 +38,11 @@ extension MainViewPresenter: OutputMainViewControllerDelegate {
         // TBD
         
         func search(withClosure: Bool, with query: String ) {
-            
             guard withClosure else {
                 Task {
                     let movies = try await NetworkManager.shared.searchMovies(query: query)
                     self.movies = movies
+#warning("Новое")
                     delegate?.update(with: movies)
                 }
                 return
@@ -49,9 +52,11 @@ extension MainViewPresenter: OutputMainViewControllerDelegate {
                 switch result {
                 case .success(let movies):
                     self.movies = movies
+#warning("Новое")
                     self.delegate?.update(with: self.movies)
                 case .failure(let error):
                     print("Ошибка: \(error.localizedDescription)")
+#warning("Новое")
                     self.delegate?.update(with: self.popularMovies)
                 }
             }

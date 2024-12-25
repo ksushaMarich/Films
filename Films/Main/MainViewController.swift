@@ -7,6 +7,7 @@
 
 import UIKit
 
+#warning("Изменила название делегата")
 protocol OutputMainViewControllerDelegate: AnyObject {
     func searchMovies(with query: String)
 }
@@ -69,11 +70,13 @@ extension MainViewController {
 
 extension MainViewController: SearchHeaderViewDelegate {
     func search(_ query: String) {
+#warning("Теперь контроллер только нежно просит делигат сделать все")
         delegate?.searchMovies(with: query)
     }
 }
 
 extension MainViewController: InputMainViewControllerDelegate {
+#warning("Новое")
     func update(with movies: [Movie]) {
         self.movies = movies
         tableView.reloadData()
