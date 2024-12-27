@@ -71,7 +71,6 @@ class MovieCell: UITableViewCell {
     }
     
     @objc func cellIsTapped() {
-        print("cell is tapped")
         
         guard let movie else { return }
         delegate?.didSelectMovie(movie)

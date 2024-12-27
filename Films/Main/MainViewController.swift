@@ -10,6 +10,8 @@ import UIKit
 #warning("Изменила название делегата")
 protocol OutputMainViewControllerDelegate: AnyObject {
     func searchMovies(with query: String)
+#warning("Новое")
+    func didSelectMovie(_ movie: Movie)
 }
 
 class MainViewController: UITableViewController {
@@ -72,7 +74,7 @@ extension MainViewController {
 #warning("Новое")
 extension MainViewController: MovieCellDelegate {
     func didSelectMovie(_ movie: Movie) {
-        print("Данные успешно переданы в контролер, вот ваш id: \(movie.id)")
+        delegate?.didSelectMovie(movie)
     }
 }
 
@@ -84,10 +86,16 @@ extension MainViewController: SearchHeaderViewDelegate {
 }
 
 extension MainViewController: InputMainViewControllerDelegate {
+    
 #warning("Новое")
     func update(with movies: [Movie]) {
         self.movies = movies
         tableView.reloadData()
+    }
+    
+#warning("Новое")
+    func presentMovieDetails(with controller: MovieDetailsController) {
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
 

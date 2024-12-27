@@ -10,6 +10,7 @@ import Foundation
 #warning("Добавила новую связь")
 protocol InputMainViewControllerDelegate: AnyObject {
     func update(with movies: [Movie])
+    func presentMovieDetails(with controller: MovieDetailsController)
 }
 
 class MainViewPresenter {
@@ -23,6 +24,7 @@ class MainViewPresenter {
 }
 
 extension MainViewPresenter: OutputMainViewControllerDelegate {
+    
     func searchMovies(with query: String) {
             
             guard !query.isEmpty else {
@@ -61,5 +63,10 @@ extension MainViewPresenter: OutputMainViewControllerDelegate {
                 }
             }
         }
+    }
+    
+#warning("Новое")
+    func didSelectMovie(_ movie: Movie) {
+        delegate?.presentMovieDetails(with: MovieDetailsController(id: movie.id))
     }
 }

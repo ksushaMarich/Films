@@ -15,6 +15,7 @@ class MovieDetailsController: UIViewController {
     
     private lazy var overviewLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 14)
@@ -40,14 +41,13 @@ class MovieDetailsController: UIViewController {
     
     // MARK: - methods
     private func setupView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .red
+        overviewLabel.text = overview
         view.addSubview(overviewLabel)
         
         NSLayoutConstraint.activate([
             overviewLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            overviewLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            overviewLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            overviewLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            overviewLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 }

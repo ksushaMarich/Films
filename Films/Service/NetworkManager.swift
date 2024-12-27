@@ -51,26 +51,13 @@ class NetworkManager {
     func searchMovies(query: String? = nil) async throws -> [Movie] {
         
         guard let url = formURL(query: query) else { throw APIError.invalidURL }
-        
+        print(url)
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             return (try JSONDecoder().decode(MovieResponse.self, from: data)).results
         } catch { print(error) }
         
         return []
-    }
-    
-    func downloadPoster(for movie: Movie) async throws -> UIImage {
-        
-        let posterImage = UIImage(named: "PosterError")!
-        
-        guard let poster = movie.poster, let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster)") else {
-            return posterImage
-        }
-        
-        let (data, _) = try await URLSession.shared.data(from: url)
-        
-        return UIImage(data: data) ?? posterImage
     }
     
     func searchMoviesWithClosure(for query: String, completion: @escaping (Result<[Movie], Error>) -> Void) {
@@ -100,5 +87,23 @@ class NetworkManager {
             }
             
         }.resume()
+    }
+    
+    func downloadPoster(for movie: Movie) async throws -> UIImage {
+        
+        let posterImage = UIImage(named: "PosterError")!
+        
+        guard let poster = movie.poster, let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster)") else {
+            return posterImage
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        return UIImage(data: data) ?? posterImage
+    }
+    
+#warning("new")
+    func downloadMovieDitails(for movieId: Int) async throws {
+        guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(String(movieId))?api_key=5e491b5e3a7e7c82df6c07d1c7448db1&language=ru-RU") else { throw APIError.invalidURL }
     }
 }
