@@ -62,9 +62,17 @@ extension MainViewController {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else { return UITableViewCell() }
         
+        cell.delegate = self
         cell.configure(with: movies[indexPath.row])
         
         return cell
+    }
+}
+
+#warning("Новое")
+extension MainViewController: MovieCellDelegate {
+    func didSelectMovie(_ movie: Movie) {
+        print("Данные успешно переданы в контролер, вот ваш id: \(movie.id)")
     }
 }
 

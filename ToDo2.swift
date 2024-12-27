@@ -12,8 +12,8 @@
     
     // Повторить и понять этот код
     
-//    func updateWithClosure(with query: String) {
-//        
+//    func searchMoviesWithClosure(with query: String) {
+//
 //        guard !query.isEmpty else {
 //            updateWithPopularMovies()
 //            return
@@ -29,7 +29,7 @@
 //                self.updateWithPo pularMovies()
 //            }
 //        }
-//    }
+//    } ✅
     
     
     // Повторить и понять этот код
@@ -49,7 +49,7 @@
                 self.updateWithPop ularMovies()
             }
         }
-    }
+    } ✅
     
     searchMoviesWithClosure(for: query) { movies in
         self.movies = movies
@@ -68,6 +68,6 @@
                 failure()
             }
         }
-    }*/
+    } ✅ */
 
 

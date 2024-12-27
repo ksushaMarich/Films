@@ -7,10 +7,19 @@
 
 import UIKit
 
+protocol MovieCellDelegate: AnyObject {
+#warning("new")
+    func didSelectMovie(_ movie: Movie)
+}
+
 class MovieCell: UITableViewCell {
 
     //MARK: - naming
     static let identifier = "MovieCell"
+    
+    weak var delegate: MovieCellDelegate?
+    
+    private var movie: Movie?
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -34,6 +43,7 @@ class MovieCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .red
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(cellIsTapped)))
         setupView()
         
     }
@@ -42,7 +52,7 @@ class MovieCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - setup view method
+    //MARK: - methods
     private func setupView() {
         let inset = CGFloat(16)
         contentView.addSubview(titleLabel)
@@ -60,9 +70,16 @@ class MovieCell: UITableViewCell {
         ])
     }
     
+    @objc func cellIsTapped() {
+        print("cell is tapped")
+        
+        guard let movie else { return }
+        delegate?.didSelectMovie(movie)
+    }
+    
     //MARK: - configuring cell method
     func configure(with movie: Movie) {
-        
+        self.movie = movie
         titleLabel.text = movie.title
         
         Task {
