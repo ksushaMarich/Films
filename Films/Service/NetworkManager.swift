@@ -104,13 +104,11 @@ class NetworkManager {
 #warning("new")
     func downloadMovieDitails(for movieId: Int) async throws -> MovieDetails {
         guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(String(movieId))?api_key=5e491b5e3a7e7c82df6c07d1c7448db1&language=ru-RU") else {
-            print("Нихуя не вышло")
             throw APIError.invalidURL
         }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let x = try JSONDecoder().decode(MovieDetails.self, from: data)
-            print(x)
             return x
         } catch { throw error}
     }

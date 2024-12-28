@@ -10,7 +10,7 @@ import Foundation
 #warning("Новое")
 
 protocol OutputMovieDetailsViewDelegate: AnyObject {
-    func configure(_ movieDetails: MovieDetails)
+    func configure(with movieDetails: MovieDetails)
 }
 
 class MovieDetailsPresenter {
@@ -21,8 +21,7 @@ class MovieDetailsPresenter {
     // MARK: - methods
     func giveData(movieId: Int) {
         Task {
-            let movieDetails = try await NetworkManager.shared.downloadMovieDitails(for: movieId)
-            delegate?.configure(movieDetails)
+            delegate?.configure(with: try await NetworkManager.shared.downloadMovieDitails(for: movieId))
         }
     }
 }

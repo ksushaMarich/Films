@@ -55,7 +55,9 @@ class MovieDetailsController: UIViewController {
 }
 
 extension MovieDetailsController: OutputMovieDetailsViewDelegate {
-    func configure(_ movieDetails: MovieDetails) {
-        overviewLabel.text = movieDetails.overview
+    func configure(with movieDetails: MovieDetails) {
+        DispatchQueue.main.async {
+            self.overviewLabel.text = movieDetails.overview
+        }
     }
 }
