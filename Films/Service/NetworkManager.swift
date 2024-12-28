@@ -51,7 +51,6 @@ class NetworkManager {
     func searchMovies(query: String? = nil) async throws -> [Movie] {
         
         guard let url = formURL(query: query) else { throw APIError.invalidURL }
-        print(url)
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             return (try JSONDecoder().decode(MovieResponse.self, from: data)).results
@@ -103,7 +102,16 @@ class NetworkManager {
     }
     
 #warning("new")
-    func downloadMovieDitails(for movieId: Int) async throws {
-        guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(String(movieId))?api_key=5e491b5e3a7e7c82df6c07d1c7448db1&language=ru-RU") else { throw APIError.invalidURL }
+    func downloadMovieDitails(for movieId: Int) async throws -> MovieDetails {
+        guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(String(movieId))?api_key=5e491b5e3a7e7c82df6c07d1c7448db1&language=ru-RU") else {
+            print("Нихуя не вышло")
+            throw APIError.invalidURL
+        }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let x = try JSONDecoder().decode(MovieDetails.self, from: data)
+            print(x)
+            return x
+        } catch { throw error}
     }
 }

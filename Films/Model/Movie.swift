@@ -15,6 +15,7 @@ enum APIError: Error {
     case emptyMovies
 }
 
+// MARK: - for movie view
 struct MovieResponse: Decodable {
     let results: [Movie]
 }
@@ -30,6 +31,25 @@ struct Movie: Decodable {
         case id, title, overview
         case poster = "poster_path"
     }
+}
+
+//MARK: - for movie details
+struct MovieDetails: Decodable {
+    let budget: Int
+    let genres: [Genre]
+    let overview: String
+    let poster: String?
+    let title: String
+    
+    enum CodingKeys: String, CodingKey {
+        case budget, genres, overview, title
+        case poster = "poster_path"
+    }
+}
+
+struct Genre: Decodable {
+    let id: Int
+    let name: String
 }
 
 

@@ -10,8 +10,8 @@ import UIKit
 class MovieDetailsController: UIViewController {
     
     // MARK: - naming
+    private let presenter = MovieDetailsPresenter()
     private let id: Int
-    private let overview: String = "Overview"
     
     private lazy var overviewLabel: UILabel = {
         let label = UILabel()
@@ -41,13 +41,21 @@ class MovieDetailsController: UIViewController {
     
     // MARK: - methods
     private func setupView() {
+        presenter.delegate = self
+        presenter.giveData(movieId: id)
         view.backgroundColor = .red
-        overviewLabel.text = overview
         view.addSubview(overviewLabel)
         
         NSLayoutConstraint.activate([
             overviewLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            overviewLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            overviewLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            overviewLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
         ])
+    }
+}
+
+extension MovieDetailsController: OutputMovieDetailsViewDelegate {
+    func configure(_ movieDetails: MovieDetails) {
+        overviewLabel.text = movieDetails.overview
     }
 }
