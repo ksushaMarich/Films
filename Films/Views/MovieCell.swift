@@ -24,7 +24,7 @@ class MovieCell: UITableViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -34,15 +34,18 @@ class MovieCell: UITableViewCell {
     private lazy var posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .white
         imageView.clipsToBounds = true
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 20
         return imageView
     }()
     
     //MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .red
+        backgroundColor = .black
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(cellIsTapped)))
         setupView()
         
@@ -55,18 +58,19 @@ class MovieCell: UITableViewCell {
     //MARK: - methods
     private func setupView() {
         let inset = CGFloat(16)
-        contentView.addSubview(titleLabel)
         contentView.addSubview(posterImageView)
+        contentView.addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
+            posterImageView.heightAnchor.constraint(equalToConstant: 500),
+            posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 0.6),
             
-            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: inset),
-            posterImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: inset),
-            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            posterImageView.heightAnchor.constraint(equalToConstant: 450),
+            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: inset),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
     

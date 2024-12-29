@@ -33,7 +33,7 @@ class SearchHeaderView: UITableViewHeaderFooterView {
         button.addTarget(self, action: #selector(search), for: .touchUpInside)
         button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         button.backgroundColor = .white
-        button.setTitleColor(.black, for: .normal)
+        button.tintColor = .black
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 5
         return button
@@ -42,7 +42,7 @@ class SearchHeaderView: UITableViewHeaderFooterView {
     //MARK: - init
     init() {
         super.init(reuseIdentifier: SearchHeaderView.identifier)
-        contentView.backgroundColor = .gray
+        contentView.backgroundColor = .black
         setupView()
     }
     
@@ -61,7 +61,7 @@ class SearchHeaderView: UITableViewHeaderFooterView {
             textField.centerYAnchor.constraint(equalTo: centerYAnchor),
             textField.topAnchor.constraint(equalTo: topAnchor, constant: inset),
             textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
-            textField.heightAnchor.constraint(equalToConstant: 50),
+            textField.heightAnchor.constraint(equalToConstant: 40),
             
             searchButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
             searchButton.topAnchor.constraint(equalTo: textField.topAnchor),

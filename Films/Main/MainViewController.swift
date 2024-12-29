@@ -28,7 +28,6 @@ class MainViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         presenter.delegate = self
         delegate = presenter
         setupView()
@@ -38,6 +37,7 @@ class MainViewController: UITableViewController {
     
     private func setupView() {
         tableView.backgroundColor = .green
+//        tableView.contentInsetAdjustmentBehavior = .never
         tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchHeaderView.identifier)
         tableView.allowsSelection = false
@@ -52,9 +52,9 @@ extension MainViewController {
         return header
     }
     
-    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        70
-    }
+//    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+//        70
+//    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         movies.count
@@ -89,13 +89,17 @@ extension MainViewController: InputMainViewControllerDelegate {
     
 #warning("Новое")
     func update(with movies: [Movie]) {
-        self.movies = movies
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.movies = movies
+            self.tableView.reloadData()
+        }
     }
     
 #warning("Новое")
     func presentMovieDetails(with controller: MovieDetailsController) {
-        navigationController?.pushViewController(controller, animated: true)
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
 }
 

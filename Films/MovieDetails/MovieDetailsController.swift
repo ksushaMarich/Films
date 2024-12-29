@@ -13,6 +13,14 @@ class MovieDetailsController: UIViewController {
     private let presenter = MovieDetailsPresenter()
     private let id: Int
     
+    private lazy var movieImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .black
+        return imageView
+    }()
+    
     private lazy var overviewLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
