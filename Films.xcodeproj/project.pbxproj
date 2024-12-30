@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		111F72862CF98FDD006B8B39 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111F72852CF98FDD006B8B39 /* NetworkManager.swift */; };
+		11BF59242D21558D00C8C632 /* MainViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BF59232D21558D00C8C632 /* MainViewBuilder.swift */; };
 		11CBC31E2D0FF64400F4F6A9 /* SearchHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CBC31D2D0FF64400F4F6A9 /* SearchHeaderView.swift */; };
 		11EE7B9F2D05998F00B03445 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EE7B9E2D05998F00B03445 /* Movie.swift */; };
 		11EE7BA22D05AC8C00B03445 /* ToDo.md in Resources */ = {isa = PBXBuildFile; fileRef = 11EE7BA12D05AC8C00B03445 /* ToDo.md */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		111F72852CF98FDD006B8B39 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		11BF59232D21558D00C8C632 /* MainViewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewBuilder.swift; sourceTree = "<group>"; };
 		11CBC31D2D0FF64400F4F6A9 /* SearchHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHeaderView.swift; sourceTree = "<group>"; };
 		11EE7B9E2D05998F00B03445 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		11EE7BA12D05AC8C00B03445 /* ToDo.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ToDo.md; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 		11C2CE582D188E5C007D0206 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				11BF59232D21558D00C8C632 /* MainViewBuilder.swift */,
 				CE19B0AD2CF4948C00B73714 /* MainViewController.swift */,
 				16E80A1D2D15A82D00EF093D /* MainViewPresenter.swift */,
 			);
@@ -333,6 +336,7 @@
 				169987752D1D5A9A0069CBCF /* MovieDetailsController.swift in Sources */,
 				1693590C2CFA218100B4B001 /* ToDo2.swift in Sources */,
 				CE19B0AC2CF4948C00B73714 /* SceneDelegate.swift in Sources */,
+				11BF59242D21558D00C8C632 /* MainViewBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

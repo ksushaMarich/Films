@@ -7,66 +7,64 @@
 
 import Foundation
 
-#warning("Добавила новую связь")
-protocol InputMainViewControllerDelegate: AnyObject {
-    func update(with movies: [Movie])
-    func presentMovieDetails(with controller: MovieDetailsController)
-}
+let viaClosure = true
 
 class MainViewPresenter {
-    weak var delegate: InputMainViewControllerDelegate?
     
+    weak var view: MainViewInput?
     private let networkManager = NetworkManager.shared
     
-#warning("Новое")
-    lazy var popularMovies: [Movie] = networkManager.popularMovies
+    private lazy var popularMovies: [Movie] = []
     private lazy var movies: [Movie] = []
+    
+    init() {
+        Task {
+            popularMovies = try await networkManager.searchMovies() // do-catch
+            
+            DispatchQueue.main.async {
+                self.view?.update(with: self.popularMovies)
+            }
+        }
+    }
 }
 
-extension MainViewPresenter: OutputMainViewControllerDelegate {
+extension MainViewPresenter: MainViewOutput {
     
     func searchMovies(with query: String) {
             
             guard !query.isEmpty else {
-#warning("Новое")
-                delegate?.update(with: popularMovies)
+                view?.update(with: popularMovies)
                 return
             }
             
-            search(withClosure: true, with: query)
-        
-        
-        
-        // TBD
-        
-        func search(withClosure: Bool, with query: String ) {
-            guard withClosure else {
-                Task {
-                    let movies = try await NetworkManager.shared.searchMovies(query: query)
-                    self.movies = movies
-#warning("Новое")
-                    delegate?.update(with: movies)
-                }
-                return
-            }
+        viaClosure ? searchWithClosure(with: query) : search(with: query)
+    }
+    
+    func search(with query: String) {
+        Task {
+            movies = try await NetworkManager.shared.searchMovies(query: query) // do-catch
             
-            networkManager.searchMoviesWithClosure(for: query) { result in
-                switch result {
-                case .success(let movies):
-                    self.movies = movies
-#warning("Новое")
-                    self.delegate?.update(with: self.movies)
-                case .failure(let error):
-                    print("Ошибка: \(error.localizedDescription)")
-#warning("Новое")
-                    self.delegate?.update(with: self.popularMovies)
-                }
+            DispatchQueue.main.async {
+                self.view?.update(with: self.movies)
             }
         }
     }
     
-#warning("Новое")
-    func didSelectMovie(_ movie: Movie) {
-        delegate?.presentMovieDetails(with: MovieDetailsController(id: movie.id))
+    func searchWithClosure(with query: String) {
+        
+        networkManager.searchMoviesWithClosure(for: query) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let movies):
+                    self.movies = movies
+                    #warning("Новое")
+                    self.view?.update(with: self.movies)
+                case .failure(let error):
+                    print("Ошибка: \(error.localizedDescription)")
+                    #warning("Новое")
+                    self.view?.update(with: self.popularMovies)
+                }
+            }
+        }
     }
 }

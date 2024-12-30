@@ -7,37 +7,26 @@
 
 import UIKit
 
-#warning("Изменила название делегата")
-protocol OutputMainViewControllerDelegate: AnyObject {
-    func searchMovies(with query: String)
-#warning("Новое")
-    func didSelectMovie(_ movie: Movie)
-}
-
 class MainViewController: UITableViewController {
     
-    //MARK: naming
+    // MARK: naming
     
-    weak var delegate: OutputMainViewControllerDelegate?
-    private var presenter = MainViewPresenter()
-    private lazy var networkManager = NetworkManager.shared
+    var presenter: MainViewOutput?
+    private lazy var movies: [Movie] = []
     
-    private lazy var movies: [Movie] = presenter.popularMovies
-    
-    //MARK: life cycle
+    // MARK: life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.delegate = self
-        delegate = presenter
+        
         setupView()
     }
     
-    //MARK: - Methods
+    // MARK: - Methods
     
     private func setupView() {
         tableView.backgroundColor = .green
-//        tableView.contentInsetAdjustmentBehavior = .never
+        //tableView.contentInsetAdjustmentBehavior = .never
         tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchHeaderView.identifier)
         tableView.allowsSelection = false
@@ -51,10 +40,6 @@ extension MainViewController {
         header.delegate = self
         return header
     }
-    
-//    override func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-//        70
-//    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         movies.count
@@ -71,37 +56,26 @@ extension MainViewController {
     }
 }
 
-#warning("Новое")
+extension MainViewController: MainViewInput {
+    func update(with movies: [Movie]) {
+        self.movies = movies
+        tableView.reloadData()
+    }
+}
+
 extension MainViewController: MovieCellDelegate {
     func didSelectMovie(_ movie: Movie) {
-        delegate?.didSelectMovie(movie)
+        navigationController?.pushViewController(MovieDetailsController(id: movie.id), animated: true)
     }
 }
 
 extension MainViewController: SearchHeaderViewDelegate {
     func search(_ query: String) {
-#warning("Теперь контроллер только нежно просит делигат сделать все")
-        delegate?.searchMovies(with: query)
+        presenter?.searchMovies(with: query)
     }
 }
 
-extension MainViewController: InputMainViewControllerDelegate {
-    
-#warning("Новое")
-    func update(with movies: [Movie]) {
-        DispatchQueue.main.async {
-            self.movies = movies
-            self.tableView.reloadData()
-        }
-    }
-    
-#warning("Новое")
-    func presentMovieDetails(with controller: MovieDetailsController) {
-        DispatchQueue.main.async {
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
-    }
-}
+
 
     
 
