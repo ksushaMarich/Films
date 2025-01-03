@@ -10,8 +10,9 @@ import UIKit
 class MovieDetailsController: UIViewController {
     
     // MARK: - naming
-    private let presenter = MovieDetailsPresenter()
-    private let id: Int
+    
+    var presenter: MovieDetailsOutput?
+    private let id: Int?
     
     private lazy var movieImageView: UIImageView = {
         let imageView = UIImageView()
@@ -32,7 +33,7 @@ class MovieDetailsController: UIViewController {
     }()
     
     // MARK: - init
-    init(id: Int) {
+    init(id: Int?) {
         self.id = id
         super.init(nibName: nil, bundle: nil)
     }
@@ -49,8 +50,8 @@ class MovieDetailsController: UIViewController {
     
     // MARK: - methods
     private func setupView() {
-        presenter.delegate = self
-        presenter.giveData(movieId: id)
+#warning("немного тут поменяла что бы работало со всем остальным")
+        presenter?.giveData(movieId: id)
         view.backgroundColor = .red
         view.addSubview(overviewLabel)
         
@@ -62,7 +63,8 @@ class MovieDetailsController: UIViewController {
     }
 }
 
-extension MovieDetailsController: OutputMovieDetailsViewDelegate {
+extension MovieDetailsController: MovieDetailsInput {
+    
     func configure(with movieDetails: MovieDetails) {
         DispatchQueue.main.async {
             self.overviewLabel.text = movieDetails.overview

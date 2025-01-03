@@ -7,21 +7,28 @@
 
 import Foundation
 
-#warning("Новое")
+#warning("Сделала такую же связь как делали на занятии")
 
-protocol OutputMovieDetailsViewDelegate: AnyObject {
+protocol MovieDetailsInput: AnyObject {
+    var presenter: MovieDetailsOutput? { get set }
     func configure(with movieDetails: MovieDetails)
 }
 
-class MovieDetailsPresenter {
+protocol MovieDetailsOutput: AnyObject {
+    var view: MovieDetailsInput? { get set }
+    func giveData(movieId: Int?)
+}
+
+class MovieDetailsPresenter: MovieDetailsOutput {
     
     // MARK: - naming
-    weak var delegate: OutputMovieDetailsViewDelegate?
+    weak var view: MovieDetailsInput?
     
     // MARK: - methods
-    func giveData(movieId: Int) {
+    func giveData(movieId: Int?) {
+        guard let movieId else { return }
         Task {
-            delegate?.configure(with: try await NetworkManager.shared.downloadMovieDitails(for: movieId))
+            view?.configure(with: try await NetworkManager.shared.downloadMovieDitails(for: movieId))
         }
     }
 }

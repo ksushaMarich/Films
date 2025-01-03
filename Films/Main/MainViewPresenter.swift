@@ -9,6 +9,17 @@ import Foundation
 
 let viaClosure = true
 
+#warning("Перенесла протоколы в этот файл")
+protocol MainViewInput: AnyObject {
+    var presenter: MainViewOutput? { get set }
+    func update(with movies: [Movie])
+}
+
+protocol MainViewOutput: AnyObject {
+    var view: MainViewInput? { get set }
+    func searchMovies(with query: String)
+}
+
 class MainViewPresenter {
     
     weak var view: MainViewInput?

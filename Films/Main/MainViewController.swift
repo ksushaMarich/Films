@@ -65,7 +65,7 @@ extension MainViewController: MainViewInput {
 
 extension MainViewController: MovieCellDelegate {
     func didSelectMovie(_ movie: Movie) {
-        navigationController?.pushViewController(MovieDetailsController(id: movie.id), animated: true)
+        navigationController?.pushViewController(ViewBuilder.build(type: .movieDetails, id: movie.id), animated: true)
     }
 }
 
