@@ -51,23 +51,23 @@ class SearchHeaderView: UITableViewHeaderFooterView {
     }
     
     //MARK: - setup view methods
-    
+#warning("Делала более красивыми констрейнты")
     private func setupView() {
         let inset = CGFloat(10)
-        addSubview(textField)
-        addSubview(searchButton)
+        contentView.addSubview(textField)
+        contentView.addSubview(searchButton)
         
         NSLayoutConstraint.activate([
-            textField.centerYAnchor.constraint(equalTo: centerYAnchor),
-            textField.topAnchor.constraint(equalTo: topAnchor, constant: inset),
-            textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
+            textField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 70),
+            textField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset),
+            textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset*2),
             textField.heightAnchor.constraint(equalToConstant: 40),
             
             searchButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
             searchButton.topAnchor.constraint(equalTo: textField.topAnchor),
             searchButton.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: inset),
             searchButton.widthAnchor.constraint(equalTo: searchButton.heightAnchor),
-            searchButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset)
+            searchButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset*2)
         ])
     }
     

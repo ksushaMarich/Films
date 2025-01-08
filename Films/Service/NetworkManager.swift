@@ -81,12 +81,12 @@ class NetworkManager {
             
         }.resume()
     }
-    
-    func downloadPoster(for movie: Movie) async throws -> UIImage {
+#warning("заменила (for movie: Movie) на (poster: String?)")
+    func downloadPoster(poster: String?) async throws -> UIImage {
         
         let posterImage = UIImage(named: "PosterError")!
         
-        guard let poster = movie.poster, let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster)") else {
+        guard let poster, let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster)") else {
             return posterImage
         }
         

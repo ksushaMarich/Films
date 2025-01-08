@@ -7,45 +7,86 @@
 
 import UIKit
 
-class MainViewController: UITableViewController {
+class MainTableView: UITableView {
+    
+    // MARK: - naming
+    
+    // MARK: - init
+    override init(frame: CGRect, style: UITableView.Style) {
+        super.init(frame: .zero, style: .plain)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - methods
+    
+}
+
+class MainViewController: UIViewController {
     
     // MARK: naming
     
     var presenter: MainViewOutput?
     private lazy var movies: [Movie] = []
+ 
+    #warning(" Для того что бы не было того дурацкого отсупа пришлось добавить тейблВью, тк идущий в тейблВьюКонтролер не вышло настраивать ")
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.sectionHeaderTopPadding = 0
+        tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
+        tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchHeaderView.identifier)
+        tableView.allowsSelection = false
+        tableView.separatorColor = .gray
+        tableView.backgroundColor = .black
+        return tableView
+    }()
     
     // MARK: life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.isNavigationBarHidden = true
         setupView()
+    }
+#warning("добавила новое что бы при возвращении назад не показывала навигацию")
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden = true
     }
     
     // MARK: - Methods
     
     private func setupView() {
-        tableView.backgroundColor = .green
-        //tableView.contentInsetAdjustmentBehavior = .never
-        tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
-        tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchHeaderView.identifier)
-        tableView.allowsSelection = false
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 }
 
-extension MainViewController {
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = SearchHeaderView()
         header.delegate = self
         return header
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         movies.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else { return UITableViewCell() }
         

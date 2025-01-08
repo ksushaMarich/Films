@@ -25,7 +25,8 @@ class MovieCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+//        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.font = UIFont(name: "Chalkboard SE", size: 40)
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -39,6 +40,8 @@ class MovieCell: UITableViewCell {
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 20
+        imageView.layer.borderColor = UIColor.white.cgColor
+        imageView.layer.borderWidth = 1
         return imageView
     }()
     
@@ -65,14 +68,15 @@ class MovieCell: UITableViewCell {
             posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
             posterImageView.heightAnchor.constraint(equalToConstant: 500),
-            posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 0.6),
+            posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 0.7),
             
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: inset),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset)
         ])
     }
+
     
     @objc func cellIsTapped() {
         
@@ -86,7 +90,7 @@ class MovieCell: UITableViewCell {
         titleLabel.text = movie.title
         
         Task {
-            posterImageView.image = try await NetworkManager.shared.downloadPoster(for: movie)
+            posterImageView.image = try await NetworkManager.shared.downloadPoster(poster: movie.poster)
         }
     }
 }

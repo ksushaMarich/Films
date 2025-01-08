@@ -5,7 +5,7 @@
 //  Created by Ксения Маричева on 26.12.2024.
 //
 
-import Foundation
+import UIKit
 
 #warning("Сделала такую же связь как делали на занятии")
 

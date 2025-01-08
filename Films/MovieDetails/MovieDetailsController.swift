@@ -14,21 +14,48 @@ class MovieDetailsController: UIViewController {
     var presenter: MovieDetailsOutput?
     private let id: Int?
     
-    private lazy var movieImageView: UIImageView = {
+    #warning("Добавила скроллВью и контентВью")
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.isScrollEnabled = true
+        scrollView.alwaysBounceVertical = true
+        scrollView.showsVerticalScrollIndicator = true
+        return scrollView
+    }()
+    
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
-        imageView.backgroundColor = .black
+        imageView.backgroundColor = .white
+        imageView.clipsToBounds = true
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 20
+        imageView.layer.borderColor = UIColor.white.cgColor
+        imageView.layer.borderWidth = 1
         return imageView
+    }()
+    
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        
+        return label
     }()
     
     private lazy var overviewLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = .white
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 14)
-        label.textAlignment = .center
+        label.font = UIFont(name: "Chalkboard SE", size: 20)
+        label.textAlignment = .left
         return label
     }()
     
@@ -46,28 +73,56 @@ class MovieDetailsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        navigationController?.isNavigationBarHidden = false
     }
     
     // MARK: - methods
     private func setupView() {
-#warning("немного тут поменяла что бы работало со всем остальным")
+    #warning("немного тут поменяла что бы работало со всем остальным")
         presenter?.giveData(movieId: id)
-        view.backgroundColor = .red
-        view.addSubview(overviewLabel)
+        
+        view.backgroundColor = .black
+        
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(posterImageView)
+        contentView.addSubview(overviewLabel)
+        
+        let inset = CGFloat(16)
         
         NSLayoutConstraint.activate([
-            overviewLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            overviewLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            overviewLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
+            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
+            posterImageView.heightAnchor.constraint(equalToConstant: 300),
+            posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 0.7),
+            
+            overviewLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: inset),
+            overviewLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            overviewLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
+            overviewLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset)
         ])
     }
 }
 
 extension MovieDetailsController: MovieDetailsInput {
     
+    
     func configure(with movieDetails: MovieDetails) {
         DispatchQueue.main.async {
             self.overviewLabel.text = movieDetails.overview
+        }
+        Task {
+            posterImageView.image = try await NetworkManager.shared.downloadPoster(poster: movieDetails.poster)
         }
     }
 }
