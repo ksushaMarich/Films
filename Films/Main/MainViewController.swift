@@ -31,7 +31,6 @@ class MainViewController: UIViewController {
     var presenter: MainViewOutput?
     private lazy var movies: [Movie] = []
  
-    #warning(" Для того что бы не было того дурацкого отсупа пришлось добавить тейблВью, тк идущий в тейблВьюКонтролер не вышло настраивать ")
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -52,10 +51,9 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.isNavigationBarHidden = true
         setupView()
     }
-#warning("добавила новое что бы при возвращении назад не показывала навигацию")
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
     }
@@ -106,7 +104,7 @@ extension MainViewController: MainViewInput {
 
 extension MainViewController: MovieCellDelegate {
     func didSelectMovie(_ movie: Movie) {
-        navigationController?.pushViewController(ViewBuilder.build(type: .movieDetails, id: movie.id), animated: true)
+        navigationController?.pushViewController(ViewBuilder.build(type: .movieDetails(id: movie.id)), animated: true)
     }
 }
 

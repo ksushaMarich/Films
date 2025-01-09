@@ -8,7 +8,6 @@
 import UIKit
 
 protocol MovieCellDelegate: AnyObject {
-#warning("new")
     func didSelectMovie(_ movie: Movie)
 }
 
@@ -25,7 +24,6 @@ class MovieCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-//        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
         label.font = UIFont(name: "Chalkboard SE", size: 40)
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -49,7 +47,7 @@ class MovieCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .black
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(cellIsTapped)))
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(cellIsTapped))) //
         setupView()
         
     }
@@ -61,25 +59,25 @@ class MovieCell: UITableViewCell {
     //MARK: - methods
     private func setupView() {
         let inset = CGFloat(16)
-        contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
+        contentView.addSubview(posterImageView)
         
         NSLayoutConstraint.activate([
-            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
-            posterImageView.heightAnchor.constraint(equalToConstant: 500),
-            posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 0.7),
             
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: inset),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset)
+            
+            posterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            posterImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: inset),
+            posterImageView.heightAnchor.constraint(equalToConstant: 500),
+            posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 0.7),
+            posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset),
         ])
     }
 
     
-    @objc func cellIsTapped() {
-        
+    @objc func cellIsTapped() { //
         guard let movie else { return }
         delegate?.didSelectMovie(movie)
     }
@@ -90,7 +88,7 @@ class MovieCell: UITableViewCell {
         titleLabel.text = movie.title
         
         Task {
-            posterImageView.image = try await NetworkManager.shared.downloadPoster(poster: movie.poster)
+            posterImageView.image = try await NetworkManager.shared.downloadPoster(poster: movie.poster)    //
         }
     }
 }

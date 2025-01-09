@@ -13,7 +13,7 @@
 		11EE7B9F2D05998F00B03445 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EE7B9E2D05998F00B03445 /* Movie.swift */; };
 		11EE7BA22D05AC8C00B03445 /* ToDo.md in Resources */ = {isa = PBXBuildFile; fileRef = 11EE7BA12D05AC8C00B03445 /* ToDo.md */; };
 		1642273B2CFEE8A70044CC43 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1642273A2CFEE8A70044CC43 /* MovieCell.swift */; };
-		1693590C2CFA218100B4B001 /* ToDo2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693590B2CFA218100B4B001 /* ToDo2.swift */; };
+		1693590C2CFA218100B4B001 /* Lesson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693590B2CFA218100B4B001 /* Lesson.swift */; };
 		169987752D1D5A9A0069CBCF /* MovieDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169987742D1D5A9A0069CBCF /* MovieDetailsController.swift */; };
 		169987772D1D5EFF0069CBCF /* MovieDetailsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169987762D1D5EFF0069CBCF /* MovieDetailsPresenter.swift */; };
 		16E80A1E2D15A82D00EF093D /* MainViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E80A1D2D15A82D00EF093D /* MainViewPresenter.swift */; };
@@ -51,7 +51,7 @@
 		11EE7B9E2D05998F00B03445 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		11EE7BA12D05AC8C00B03445 /* ToDo.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ToDo.md; sourceTree = "<group>"; };
 		1642273A2CFEE8A70044CC43 /* MovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
-		1693590B2CFA218100B4B001 /* ToDo2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo2.swift; sourceTree = "<group>"; };
+		1693590B2CFA218100B4B001 /* Lesson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lesson.swift; sourceTree = "<group>"; };
 		169987742D1D5A9A0069CBCF /* MovieDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsController.swift; sourceTree = "<group>"; };
 		169987762D1D5EFF0069CBCF /* MovieDetailsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsPresenter.swift; sourceTree = "<group>"; };
 		16E80A1D2D15A82D00EF093D /* MainViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewPresenter.swift; sourceTree = "<group>"; };
@@ -132,7 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				11EE7BA12D05AC8C00B03445 /* ToDo.md */,
-				1693590B2CFA218100B4B001 /* ToDo2.swift */,
+				1693590B2CFA218100B4B001 /* Lesson.swift */,
 				CE19B0A82CF4948C00B73714 /* Films */,
 				CE19B0BF2CF4948D00B73714 /* FilmsTests */,
 				CE19B0C92CF4948D00B73714 /* FilmsUITests */,
@@ -334,7 +334,7 @@
 				CE19B0AA2CF4948C00B73714 /* AppDelegate.swift in Sources */,
 				169987772D1D5EFF0069CBCF /* MovieDetailsPresenter.swift in Sources */,
 				169987752D1D5A9A0069CBCF /* MovieDetailsController.swift in Sources */,
-				1693590C2CFA218100B4B001 /* ToDo2.swift in Sources */,
+				1693590C2CFA218100B4B001 /* Lesson.swift in Sources */,
 				CE19B0AC2CF4948C00B73714 /* SceneDelegate.swift in Sources */,
 				11BF59242D21558D00C8C632 /* ViewBuilder.swift in Sources */,
 			);

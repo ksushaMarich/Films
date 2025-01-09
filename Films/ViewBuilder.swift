@@ -7,28 +7,25 @@
 
 import UIKit
 
-#warning("сдела билдер общим")
-
 enum ViewType {
     case main
-    case movieDetails
+    case movieDetails(id: Int)
 }
+
 class ViewBuilder {
     
-    static func build(type: ViewType, id: Int? = nil) -> UIViewController {
+    static func build(type: ViewType) -> UIViewController {
         
         switch type {
         case .main:
             let view = MainViewController()
             let presenter = MainViewPresenter()
-            
             view.presenter = presenter
             presenter.view = view
             return UINavigationController(rootViewController: view)
-        case .movieDetails:
+        case .movieDetails(let id):
             let view = MovieDetailsController(id: id)
             let presenter = MovieDetailsPresenter()
-            
             view.presenter = presenter
             presenter.view = view
             return view

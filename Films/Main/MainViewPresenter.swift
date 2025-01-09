@@ -9,7 +9,6 @@ import Foundation
 
 let viaClosure = true
 
-#warning("Перенесла протоколы в этот файл")
 protocol MainViewInput: AnyObject {
     var presenter: MainViewOutput? { get set }
     func update(with movies: [Movie])
@@ -26,7 +25,6 @@ class MainViewPresenter {
     private let networkManager = NetworkManager.shared
     
     private lazy var popularMovies: [Movie] = []
-    private lazy var movies: [Movie] = []
     
     init() {
         Task {
@@ -53,28 +51,24 @@ extension MainViewPresenter: MainViewOutput {
     
     func search(with query: String) {
         Task {
-            movies = try await NetworkManager.shared.searchMovies(query: query) // do-catch
+            let movies = try await NetworkManager.shared.searchMovies(query: query) // do-catch
             
             DispatchQueue.main.async {
-                self.view?.update(with: self.movies)
+                self.view?.update(with: movies)
             }
         }
     }
     
     func searchWithClosure(with query: String) {
         
-        networkManager.searchMoviesWithClosure(for: query) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let movies):
-                    self.movies = movies
-                    #warning("Новое")
-                    self.view?.update(with: self.movies)
-                case .failure(let error):
-                    print("Ошибка: \(error.localizedDescription)")
-                    #warning("Новое")
-                    self.view?.update(with: self.popularMovies)
-                }
+        networkManager.searchMoviesWithClosure(for: query) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let movies):
+                view?.update(with: movies)
+            case .failure(let error):
+                print("Ошибка: \(error.localizedDescription)")
+                view?.update(with: popularMovies)
             }
         }
     }

@@ -7,8 +7,6 @@
 
 import UIKit
 
-#warning("Сделала такую же связь как делали на занятии")
-
 protocol MovieDetailsInput: AnyObject {
     var presenter: MovieDetailsOutput? { get set }
     func configure(with movieDetails: MovieDetails)
@@ -16,7 +14,7 @@ protocol MovieDetailsInput: AnyObject {
 
 protocol MovieDetailsOutput: AnyObject {
     var view: MovieDetailsInput? { get set }
-    func giveData(movieId: Int?)
+    func getDetails(by movieId: Int)
 }
 
 class MovieDetailsPresenter: MovieDetailsOutput {
@@ -25,10 +23,12 @@ class MovieDetailsPresenter: MovieDetailsOutput {
     weak var view: MovieDetailsInput?
     
     // MARK: - methods
-    func giveData(movieId: Int?) {
-        guard let movieId else { return }
+    func getDetails(by movieId: Int) {
         Task {
-            view?.configure(with: try await NetworkManager.shared.downloadMovieDitails(for: movieId))
+            let movieDetails = try await NetworkManager.shared.downloadMovieDetails(for: movieId)
+            DispatchQueue.main.async {
+                self.view?.configure(with: movieDetails)
+            }
         }
     }
 }

@@ -51,7 +51,7 @@ class SearchHeaderView: UITableViewHeaderFooterView {
     }
     
     //MARK: - setup view methods
-#warning("Делала более красивыми констрейнты")
+    
     private func setupView() {
         let inset = CGFloat(10)
         contentView.addSubview(textField)

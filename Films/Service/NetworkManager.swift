@@ -32,7 +32,7 @@ class NetworkManager {
         
         urlComponents.path = "/3/movie/popular"
         
-        if let query = query {
+        if let query {
             urlComponents.path = "/3/search/movie"
             queryItems += [URLQueryItem(name: "query", value: query)]
         }
@@ -62,26 +62,28 @@ class NetworkManager {
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             
-            if let error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let data else {
-                completion(.failure(APIError.noData))
-                return
-            }
-            
-            do {
-                let results = (try JSONDecoder().decode(MovieResponse.self, from: data)).results
-                completion(.success(results))
-            } catch  {
-                completion(.failure(error))
+            DispatchQueue.main.async {
+                
+                if let error {
+                    completion(.failure(error))
+                    return
+                }
+                
+                guard let data else {
+                    completion(.failure(APIError.noData))
+                    return
+                }
+                
+                do {
+                    completion(.success((try JSONDecoder().decode(MovieResponse.self, from: data)).results))
+                } catch  {
+                    completion(.failure(error))
+                }
             }
             
         }.resume()
     }
-#warning("заменила (for movie: Movie) на (poster: String?)")
+    
     func downloadPoster(poster: String?) async throws -> UIImage {
         
         let posterImage = UIImage(named: "PosterError")!
@@ -95,15 +97,14 @@ class NetworkManager {
         return UIImage(data: data) ?? posterImage
     }
     
-#warning("new")
-    func downloadMovieDitails(for movieId: Int) async throws -> MovieDetails {
-        guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(String(movieId))?api_key=5e491b5e3a7e7c82df6c07d1c7448db1&language=ru-RU") else {
-            throw APIError.invalidURL
-        }
+    func downloadMovieDetails(for movieId: Int) async throws -> MovieDetails {
+        
+        guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(String(movieId))?api_key=5e491b5e3a7e7c82df6c07d1c7448db1&language=ru-RU")
+        else { throw APIError.invalidURL }
+        
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let x = try JSONDecoder().decode(MovieDetails.self, from: data)
-            return x
-        } catch { throw error}
+            return try JSONDecoder().decode(MovieDetails.self, from: data)
+        } catch { throw error }
     }
 }

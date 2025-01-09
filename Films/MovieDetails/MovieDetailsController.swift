@@ -12,9 +12,15 @@ class MovieDetailsController: UIViewController {
     // MARK: - naming
     
     var presenter: MovieDetailsOutput?
-    private let id: Int?
     
-    #warning("Добавила скроллВью и контентВью")
+    private let id: Int
+    
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -22,12 +28,6 @@ class MovieDetailsController: UIViewController {
         scrollView.alwaysBounceVertical = true
         scrollView.showsVerticalScrollIndicator = true
         return scrollView
-    }()
-    
-    private lazy var contentView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
     }()
     
     private lazy var posterImageView: UIImageView = {
@@ -45,7 +45,7 @@ class MovieDetailsController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        
+        // tbd
         return label
     }()
     
@@ -60,7 +60,7 @@ class MovieDetailsController: UIViewController {
     }()
     
     // MARK: - init
-    init(id: Int?) {
+    init(id: Int) {
         self.id = id
         super.init(nibName: nil, bundle: nil)
     }
@@ -72,14 +72,16 @@ class MovieDetailsController: UIViewController {
     // MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.getDetails(by: id)
         setupView()
-        navigationController?.isNavigationBarHidden = false
     }
     
     // MARK: - methods
     private func setupView() {
-    #warning("немного тут поменяла что бы работало со всем остальным")
-        presenter?.giveData(movieId: id)
+        
+        navigationController?.isNavigationBarHidden = false
+        navigationController?.navigationBar.tintColor = .white
         
         view.backgroundColor = .black
         
@@ -116,11 +118,10 @@ class MovieDetailsController: UIViewController {
 
 extension MovieDetailsController: MovieDetailsInput {
     
-    
     func configure(with movieDetails: MovieDetails) {
-        DispatchQueue.main.async {
-            self.overviewLabel.text = movieDetails.overview
-        }
+        
+        overviewLabel.text = movieDetails.overview
+        
         Task {
             posterImageView.image = try await NetworkManager.shared.downloadPoster(poster: movieDetails.poster)
         }
