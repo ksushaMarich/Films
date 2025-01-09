@@ -13,6 +13,7 @@ enum APIError: Error {
     case serverError
     case decodingError
     case emptyMovies
+    case recurringRequest
 }
 
 // MARK: - for movie view

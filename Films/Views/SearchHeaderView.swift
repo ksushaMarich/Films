@@ -9,6 +9,7 @@ import UIKit
 
 protocol SearchHeaderViewDelegate: AnyObject {
     func search(_ query: String)
+    func searchBarIsEmpty()
 }
 
 class SearchHeaderView: UITableViewHeaderFooterView {
@@ -24,6 +25,7 @@ class SearchHeaderView: UITableViewHeaderFooterView {
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 5
         textField.backgroundColor = .white
+        textField.delegate = self
         return textField
     }()
     
@@ -75,5 +77,21 @@ class SearchHeaderView: UITableViewHeaderFooterView {
     
     @objc func search() {
         delegate?.search(textField.text ?? "")
+    }
+}
+
+extension SearchHeaderView: UITextFieldDelegate {
+    #warning("Новая функция срабатывает, когда пустой запрос")
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let currentText = textField.text,
+           let textRange = Range(range, in: currentText) {
+            let updatedText = currentText.replacingCharacters(in: textRange, with: string)
+            
+            if updatedText.isEmpty {
+                print("TextField стал пустым")
+                delegate?.searchBarIsEmpty()
+            }
+        }
+        return true
     }
 }

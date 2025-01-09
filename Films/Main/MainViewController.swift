@@ -109,11 +109,15 @@ extension MainViewController: MovieCellDelegate {
 }
 
 extension MainViewController: SearchHeaderViewDelegate {
+    
     func search(_ query: String) {
         presenter?.searchMovies(with: query)
     }
+    
+    func searchBarIsEmpty() {
+        presenter?.searchBarIsEmpty()
+    }
 }
-
 
 
     
