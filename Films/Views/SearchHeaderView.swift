@@ -12,6 +12,7 @@ protocol SearchHeaderViewDelegate: AnyObject {
     func searchBarIsEmpty()
 }
 
+#warning("удалила кнопку поиска, тк поиск стал реактивный")
 class SearchHeaderView: UITableViewHeaderFooterView {
     
     //MARK: - naming
@@ -29,16 +30,12 @@ class SearchHeaderView: UITableViewHeaderFooterView {
         return textField
     }()
     
-    private lazy var searchButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(search), for: .touchUpInside)
-        button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
-        button.backgroundColor = .white
-        button.tintColor = .black
-        button.layer.masksToBounds = true
-        button.layer.cornerRadius = 5
-        return button
+    private lazy var searchImageView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.tintColor = .systemGray
+        view.image = UIImage(systemName: "magnifyingglass")
+        return view
     }()
     
     //MARK: - init
@@ -57,26 +54,19 @@ class SearchHeaderView: UITableViewHeaderFooterView {
     private func setupView() {
         let inset = CGFloat(10)
         contentView.addSubview(textField)
-        contentView.addSubview(searchButton)
+        textField.addSubview(searchImageView)
         
         NSLayoutConstraint.activate([
+            textField.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             textField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 70),
             textField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset),
             textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset*2),
             textField.heightAnchor.constraint(equalToConstant: 40),
             
-            searchButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
-            searchButton.topAnchor.constraint(equalTo: textField.topAnchor),
-            searchButton.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: inset),
-            searchButton.widthAnchor.constraint(equalTo: searchButton.heightAnchor),
-            searchButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset*2)
+            searchImageView.topAnchor.constraint(equalTo: textField.topAnchor, constant: inset),
+            searchImageView.bottomAnchor.constraint(equalTo: textField.bottomAnchor, constant: -inset),
+            searchImageView.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -inset),
         ])
-    }
-    
-    //MARK: - search method
-    
-    @objc func search() {
-        delegate?.search(textField.text ?? "")
     }
 }
 
@@ -90,6 +80,8 @@ extension SearchHeaderView: UITextFieldDelegate {
             if updatedText.isEmpty {
                 print("TextField стал пустым")
                 delegate?.searchBarIsEmpty()
+            } else {
+                delegate?.search(currentText)
             }
         }
         return true

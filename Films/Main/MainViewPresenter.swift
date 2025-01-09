@@ -27,8 +27,6 @@ class MainViewPresenter {
     
     private lazy var popularMovies: [Movie] = []
     
-    private var currentRequest: String = ""
-    
     init() {
         Task {
             popularMovies = try await networkManager.searchMovies() // do-catch
@@ -44,7 +42,6 @@ extension MainViewPresenter: MainViewOutput {
     #warning("Новая функция срабатывает, когда пустой запрос")
     func searchBarIsEmpty() {
         view?.update(with: popularMovies)
-        currentRequest = ""
     }
     
     
@@ -56,10 +53,6 @@ extension MainViewPresenter: MainViewOutput {
     }
     
     func search(with query: String) {
-    #warning("добавила проверку и присвоение значения переменной")
-        guard currentRequest != query else { return }
-        
-        currentRequest = query
         
         Task {
             let movies = try await NetworkManager.shared.searchMovies(query: query) // do-catch
@@ -71,10 +64,6 @@ extension MainViewPresenter: MainViewOutput {
     }
     
     func searchWithClosure(with query: String) {
-    #warning("добавила проверку и присвоение значения переменной")
-        guard currentRequest != query else { return }
-        
-        currentRequest = query
         
         networkManager.searchMoviesWithClosure(for: query) { [weak self] result in
             guard let self else { return }
