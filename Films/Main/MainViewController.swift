@@ -22,7 +22,6 @@ class MainViewController: UIViewController {
         tableView.sectionHeaderTopPadding = 0
         tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: SearchHeaderView.identifier)
-        tableView.allowsSelection = false
         tableView.separatorColor = .gray
         tableView.backgroundColor = .black
         return tableView
@@ -65,10 +64,15 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else { return UITableViewCell() }
         
-        cell.delegate = self
+        cell.isUserInteractionEnabled = true
         cell.configure(with: movies[indexPath.row])
         
         return cell
+    }
+    
+    #warning("сделала распознование нажатия в ячейки стандартым а не через делегат")
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        navigationController?.pushViewController(ViewBuilder.build(type: .movieDetails(id: movies[indexPath.row].id)), animated: true)
     }
 }
 
@@ -78,12 +82,6 @@ extension MainViewController: MainViewInput {
         #warning("Добавила прокрутку на верх при поиске фильмов")
         tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         tableView.reloadData()
-    }
-}
-
-extension MainViewController: MovieCellDelegate {
-    func didSelectMovie(_ movie: Movie) {
-        navigationController?.pushViewController(ViewBuilder.build(type: .movieDetails(id: movie.id)), animated: true)
     }
 }
 

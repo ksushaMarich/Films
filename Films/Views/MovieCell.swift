@@ -7,16 +7,10 @@
 
 import UIKit
 
-protocol MovieCellDelegate: AnyObject {
-    func didSelectMovie(_ movie: Movie)
-}
-
 class MovieCell: UITableViewCell {
 
     //MARK: - naming
     static let identifier = "MovieCell"
-    
-    weak var delegate: MovieCellDelegate?
     
     private var movie: Movie?
     
@@ -47,7 +41,6 @@ class MovieCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .black
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(cellIsTapped))) //
         setupView()
         
     }
@@ -74,12 +67,6 @@ class MovieCell: UITableViewCell {
             posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 0.7),
             posterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset),
         ])
-    }
-
-    
-    @objc func cellIsTapped() { //
-        guard let movie else { return }
-        delegate?.didSelectMovie(movie)
     }
     
     //MARK: - configuring cell method
