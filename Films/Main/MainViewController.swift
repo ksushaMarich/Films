@@ -7,27 +7,9 @@
 
 import UIKit
 
-class MainTableView: UITableView {
-    
-    // MARK: - naming
-    
-    // MARK: - init
-    override init(frame: CGRect, style: UITableView.Style) {
-        super.init(frame: .zero, style: .plain)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: - methods
-    
-}
-
 class MainViewController: UIViewController {
     
     // MARK: naming
-    
     var presenter: MainViewOutput?
     private lazy var movies: [Movie] = []
  
@@ -47,19 +29,14 @@ class MainViewController: UIViewController {
     }()
     
     // MARK: life cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.isNavigationBarHidden = true
         setupView()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.isNavigationBarHidden = true
-    }
-    
     // MARK: - Methods
-    
     private func setupView() {
         view.addSubview(tableView)
         

@@ -7,9 +7,11 @@
 
 import UIKit
 
+#warning("добавила новую функцию в протокол")
 protocol MovieDetailsInput: AnyObject {
     var presenter: MovieDetailsOutput? { get set }
-    func configure(with movieDetails: MovieDetails)
+    func configureWithDetails(_ movieDetails: MovieDetails)
+    func configureWithPoster(_ poster: UIImage)
 }
 
 protocol MovieDetailsOutput: AnyObject {
@@ -23,11 +25,16 @@ class MovieDetailsPresenter: MovieDetailsOutput {
     weak var view: MovieDetailsInput?
     
     // MARK: - methods
+    #warning("изменила функцию что бы постер качался тут а не в контроллере")
     func getDetails(by movieId: Int) {
         Task {
             let movieDetails = try await NetworkManager.shared.downloadMovieDetails(for: movieId)
             DispatchQueue.main.async {
-                self.view?.configure(with: movieDetails)
+                self.view?.configureWithDetails(movieDetails)
+            }
+            let poster = try await NetworkManager.shared.downloadPoster(poster: movieDetails.poster)
+            DispatchQueue.main.async {
+                self.view?.configureWithPoster(poster)
             }
         }
     }
