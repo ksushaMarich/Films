@@ -75,6 +75,8 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 extension MainViewController: MainViewInput {
     func update(with movies: [Movie]) {
         self.movies = movies
+        #warning("Добавила прокрутку на верх при поиске фильмов")
+        tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         tableView.reloadData()
     }
 }

@@ -78,7 +78,6 @@ extension SearchHeaderView: UITextFieldDelegate {
             let updatedText = currentText.replacingCharacters(in: textRange, with: string)
             
             if updatedText.isEmpty {
-                print("TextField стал пустым")
                 delegate?.searchBarIsEmpty()
             } else {
                 delegate?.search(currentText)
