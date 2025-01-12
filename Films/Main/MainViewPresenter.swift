@@ -12,6 +12,8 @@ let viaClosure = true
 protocol MainViewInput: AnyObject {
     var presenter: MainViewOutput? { get set }
     func update(with movies: [Movie])
+    #warning("добавила новую функцию")
+    func showAlert(with title: String)
 }
 
 protocol MainViewOutput: AnyObject {
@@ -29,11 +31,14 @@ class MainViewPresenter {
     
     init() {
         Task {
-            popularMovies = try await networkManager.searchMovies() // do-catch
+        #warning("добавила блок do catch")
+            do {
+            popularMovies = try await networkManager.searchMovies()
             
-            DispatchQueue.main.async {
-                self.view?.update(with: self.popularMovies)
-            }
+                DispatchQueue.main.async {
+                    self.view?.update(with: self.popularMovies) }
+                
+            } catch let error as APIError { view?.showAlert(with: error.description) }
         }
     }
 }
@@ -53,13 +58,15 @@ extension MainViewPresenter: MainViewOutput {
     }
     
     func search(with query: String) {
-        
+        #warning("добавила блок do catch")
         Task {
-            let movies = try await NetworkManager.shared.searchMovies(query: query) // do-catch
-            
-            DispatchQueue.main.async {
-                self.view?.update(with: movies)
-            }
+            do {
+                let movies = try await NetworkManager.shared.searchMovies(query: query)
+                
+                DispatchQueue.main.async {
+                    self.view?.update(with: movies)
+                }
+            } catch let error as APIError { view?.showAlert(with: error.description) }
         }
     }
     
@@ -71,8 +78,7 @@ extension MainViewPresenter: MainViewOutput {
             case .success(let movies):
                 view?.update(with: movies)
             case .failure(let error):
-                print("Ошибка: \(error.localizedDescription)")
-                view?.update(with: popularMovies)
+                view?.showAlert(with: error.description)
             }
         }
     }

@@ -77,11 +77,22 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension MainViewController: MainViewInput {
+    
     func update(with movies: [Movie]) {
         self.movies = movies
         #warning("Добавила прокрутку на верх при поиске фильмов")
         tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         tableView.reloadData()
+    }
+    
+    #warning("добавила отображение алерта в случаях возникновения ошибки")
+    func showAlert(with title: String) {
+        let alertController = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+            
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
 }
 

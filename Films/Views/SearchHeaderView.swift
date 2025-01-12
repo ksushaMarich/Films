@@ -73,6 +73,7 @@ class SearchHeaderView: UITableViewHeaderFooterView {
 extension SearchHeaderView: UITextFieldDelegate {
     #warning("Новая функция срабатывает, когда пустой запрос")
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
         if let currentText = textField.text,
            let textRange = Range(range, in: currentText) {
             let updatedText = currentText.replacingCharacters(in: textRange, with: string)

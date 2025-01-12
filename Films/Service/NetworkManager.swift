@@ -18,7 +18,7 @@ class NetworkManager {
     private let language = "ru-RU"
     
     private init() {}
-            
+    
     private func formURL(query: String?) -> URL? {
         
         var urlComponents = URLComponents()
@@ -48,24 +48,27 @@ class NetworkManager {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             return (try JSONDecoder().decode(MovieResponse.self, from: data)).results
-        } catch { print(error) }
+        } catch { throw APIError.noData }
         
         return []
     }
     
-    func searchMoviesWithClosure(for query: String, completion: @escaping (Result<[Movie], Error>) -> Void) {
+    
+    #warning("добавила типы выкидываемых ошибок")
+    func searchMoviesWithClosure(for query: String, completion: @escaping (Result<[Movie],
+                                                                           APIError>) -> Void) {
         
         guard let url = formURL(query: query) else {
             completion(.failure(APIError.invalidURL))
             return
         }
-        
+
         URLSession.shared.dataTask(with: url) { data, response, error in
             
             DispatchQueue.main.async {
                 
                 if let error {
-                    completion(.failure(error))
+                    completion(.failure(APIError.serverError))
                     return
                 }
                 
@@ -77,7 +80,7 @@ class NetworkManager {
                 do {
                     completion(.success((try JSONDecoder().decode(MovieResponse.self, from: data)).results))
                 } catch  {
-                    completion(.failure(error))
+                    completion(.failure(APIError.decodingError))
                 }
             }
             
@@ -88,13 +91,13 @@ class NetworkManager {
         
         let posterImage = UIImage(named: "PosterError")!
         
-        guard let poster, let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster)") else {
-            return posterImage
-        }
+        guard let poster, let url = URL(string: "https://image.tmdb.org/t/p/w500\(poster)") else { return posterImage }
         
-        let (data, _) = try await URLSession.shared.data(from: url)
-        
-        return UIImage(data: data) ?? posterImage
+    #warning("добавила do catch")
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return UIImage(data: data) ?? posterImage
+        } catch { throw APIError.noData }
     }
     
     func downloadMovieDetails(for movieId: Int) async throws -> MovieDetails {
@@ -102,9 +105,10 @@ class NetworkManager {
         guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(String(movieId))?api_key=5e491b5e3a7e7c82df6c07d1c7448db1&language=ru-RU")
         else { throw APIError.invalidURL }
         
+    #warning("добавила do catch")
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             return try JSONDecoder().decode(MovieDetails.self, from: data)
-        } catch { throw error }
+        } catch { throw APIError.noData }
     }
 }

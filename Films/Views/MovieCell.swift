@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+#warning("убрала делегат")
 class MovieCell: UITableViewCell {
 
     //MARK: - naming

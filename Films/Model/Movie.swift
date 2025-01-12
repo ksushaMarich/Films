@@ -7,13 +7,23 @@
 
 import Foundation
 
+// MARK: - error
 enum APIError: Error {
     case invalidURL
     case noData
     case serverError
     case decodingError
-    case emptyMovies
-    case recurringRequest
+}
+
+extension APIError: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .invalidURL: return "Invalid URL"
+        case .noData: return "No data"
+        case .serverError: return "Проверте подключение"
+        case .decodingError: return "Decoding error"
+        }
+    }
 }
 
 // MARK: - for movie view
@@ -53,7 +63,7 @@ struct Genre: Decodable {
     let name: String
 }
 
-
+#warning("не помню что это такое")
 /*
  private let booleanNum: Int
  
