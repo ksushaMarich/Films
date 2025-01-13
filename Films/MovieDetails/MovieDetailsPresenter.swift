@@ -24,18 +24,23 @@ class MovieDetailsPresenter: MovieDetailsOutput {
     weak var view: MovieDetailsInput?
     
     // MARK: - methods
-    
+#warning("Поменяла метод что бы работал через обращение к NM")
     func getDetails(by movieId: Int) {
-        // NM
-        Task {
-            let movieDetails = try await NetworkManager.shared.downloadMovieDetails(for: movieId)   //do-catch
-            DispatchQueue.main.async {
-                self.view?.configureWithDetails(movieDetails)
-            }
-            let poster = try await NetworkManager.shared.downloadPoster(poster: movieDetails.poster)    //do-catch
-            DispatchQueue.main.async {
+        var gottenDetails: MovieDetails?
+        
+        NM.getDetails(by: movieId) { movieDetails in
+            self.view?.configureWithDetails(movieDetails)
+            gottenDetails = movieDetails
+            
+            NM.downloadPoster(posterPath: gottenDetails?.poster) { poster in
                 self.view?.configureWithPoster(poster)
+                
+            } failure: { error in
+                print(error)
             }
+            
+        } failure: { error in
+            print(error)
         }
     }
 }

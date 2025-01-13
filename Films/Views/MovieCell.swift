@@ -41,6 +41,8 @@ class MovieCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .black
+        #warning("Убрала цвет выделения ячейки так больше нравиться")
+        selectionStyle = .none
         setupView()
     }
     
@@ -73,9 +75,10 @@ class MovieCell: UITableViewCell {
         self.movie = movie
         titleLabel.text = movie.title
         
-        // NM
-        Task {
-            posterImageView.image = try await NetworkManager.shared.downloadPoster(poster: movie.poster)    //do-catch
+        NM.downloadPoster(posterPath: movie.poster) { poster in
+            self.posterImageView.image = poster
+        } failure: { error in
+            print(error)
         }
     }
 }

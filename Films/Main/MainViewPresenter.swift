@@ -23,7 +23,6 @@ protocol MainViewOutput: AnyObject {
 class MainViewPresenter {
     
     weak var view: MainViewInput?
-    private let networkManager = NetworkManager.shared
     
     private lazy var popularMovies: [Movie] = []
     
@@ -52,16 +51,12 @@ extension MainViewPresenter: MainViewOutput {
         }
     }
     
+    #warning("Поменяла функцию теперь она обращается к NM")
     func searchWithClosure(with query: String) {
-        
-        networkManager.searchMoviesWithClosure(for: query) { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case .success(let movies):
-                view?.update(with: movies)
-            case .failure(let error):
-                view?.showAlert(with: error.description)
-            }
+        NM.searchMovies(query: query) { movies in
+            self.view?.update(with: movies)
+        } failure: { error in
+            self.view?.showAlert(with: error)
         }
     }
 }

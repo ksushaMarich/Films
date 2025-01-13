@@ -71,3 +71,14 @@
     } ✅ */
 
 
+//networkManager.searchMoviesWithClosure(for: query) { [weak self] result in
+//    guard let self else { return }
+//    switch result {
+//    case .success(let movies):
+//        view?.update(with: movies)
+//    case .failure(let error):
+//        view?.showAlert(with: error.description)
+//    }
+//}
+
+

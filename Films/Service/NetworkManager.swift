@@ -60,9 +60,8 @@ class NetworkManager {
             return
         }
 
+        #warning("Убрала выход в главный поток")
         URLSession.shared.dataTask(with: url) { data, response, error in
-            
-            DispatchQueue.main.async {
                 
                 if let _ = error {
                     completion(.failure(APIError.serverError))
@@ -79,7 +78,6 @@ class NetworkManager {
                 } catch {
                     completion(.failure(APIError.decodingError))
                 }
-            }
             
         }.resume()
     }
