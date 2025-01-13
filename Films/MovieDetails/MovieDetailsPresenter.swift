@@ -7,7 +7,6 @@
 
 import UIKit
 
-#warning("добавила новую функцию в протокол")
 protocol MovieDetailsInput: AnyObject {
     var presenter: MovieDetailsOutput? { get set }
     func configureWithDetails(_ movieDetails: MovieDetails)
@@ -25,14 +24,15 @@ class MovieDetailsPresenter: MovieDetailsOutput {
     weak var view: MovieDetailsInput?
     
     // MARK: - methods
-    #warning("изменила функцию что бы постер качался тут а не в контроллере")
+    
     func getDetails(by movieId: Int) {
+        // NM
         Task {
-            let movieDetails = try await NetworkManager.shared.downloadMovieDetails(for: movieId)
+            let movieDetails = try await NetworkManager.shared.downloadMovieDetails(for: movieId)   //do-catch
             DispatchQueue.main.async {
                 self.view?.configureWithDetails(movieDetails)
             }
-            let poster = try await NetworkManager.shared.downloadPoster(poster: movieDetails.poster)
+            let poster = try await NetworkManager.shared.downloadPoster(poster: movieDetails.poster)    //do-catch
             DispatchQueue.main.async {
                 self.view?.configureWithPoster(poster)
             }

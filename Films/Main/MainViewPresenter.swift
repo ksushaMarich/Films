@@ -12,14 +12,12 @@ let viaClosure = true
 protocol MainViewInput: AnyObject {
     var presenter: MainViewOutput? { get set }
     func update(with movies: [Movie])
-    #warning("добавила новую функцию")
     func showAlert(with title: String)
 }
 
 protocol MainViewOutput: AnyObject {
     var view: MainViewInput? { get set }
     func searchMovies(with query: String)
-    func searchBarIsEmpty()
 }
 
 class MainViewPresenter {
@@ -30,43 +28,27 @@ class MainViewPresenter {
     private lazy var popularMovies: [Movie] = []
     
     init() {
-        Task {
-        #warning("добавила блок do catch")
-            do {
-            popularMovies = try await networkManager.searchMovies()
-            
-                DispatchQueue.main.async {
-                    self.view?.update(with: self.popularMovies) }
-                
-            } catch let error as APIError { view?.showAlert(with: error.description) }
+        NM.searchMovies { popularMovies in
+            self.popularMovies = popularMovies
+            self.view?.update(with: popularMovies)
+        } failure: { error in
+            self.view?.showAlert(with: error)
         }
     }
 }
 
 extension MainViewPresenter: MainViewOutput {
-    #warning("Новая функция срабатывает, когда пустой запрос")
-    func searchBarIsEmpty() {
-        view?.update(with: popularMovies)
-    }
-    
     
     func searchMovies(with query: String) {
-            
-            guard !query.isEmpty else { return }
-            
+        query.isEmpty ? view?.update(with: popularMovies) :
         viaClosure ? searchWithClosure(with: query) : search(with: query)
     }
     
     func search(with query: String) {
-        #warning("добавила блок do catch")
-        Task {
-            do {
-                let movies = try await NetworkManager.shared.searchMovies(query: query)
-                
-                DispatchQueue.main.async {
-                    self.view?.update(with: movies)
-                }
-            } catch let error as APIError { view?.showAlert(with: error.description) }
+        NM.searchMovies(query: query) { movies in
+            self.view?.update(with: movies)
+        } failure: { error in
+            self.view?.showAlert(with: error)
         }
     }
     

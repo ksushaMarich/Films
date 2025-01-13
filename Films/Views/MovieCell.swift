@@ -6,7 +6,7 @@
 //
 
 import UIKit
-#warning("убрала делегат")
+
 class MovieCell: UITableViewCell {
 
     //MARK: - naming
@@ -42,7 +42,6 @@ class MovieCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .black
         setupView()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -74,8 +73,9 @@ class MovieCell: UITableViewCell {
         self.movie = movie
         titleLabel.text = movie.title
         
+        // NM
         Task {
-            posterImageView.image = try await NetworkManager.shared.downloadPoster(poster: movie.poster)    //
+            posterImageView.image = try await NetworkManager.shared.downloadPoster(poster: movie.poster)    //do-catch
         }
     }
 }

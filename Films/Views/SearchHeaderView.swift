@@ -9,10 +9,8 @@ import UIKit
 
 protocol SearchHeaderViewDelegate: AnyObject {
     func search(_ query: String)
-    func searchBarIsEmpty()
 }
 
-#warning("удалила кнопку поиска, тк поиск стал реактивный")
 class SearchHeaderView: UITableViewHeaderFooterView {
     
     //MARK: - naming
@@ -71,19 +69,14 @@ class SearchHeaderView: UITableViewHeaderFooterView {
 }
 
 extension SearchHeaderView: UITextFieldDelegate {
-    #warning("Новая функция срабатывает, когда пустой запрос")
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if let currentText = textField.text,
-           let textRange = Range(range, in: currentText) {
-            let updatedText = currentText.replacingCharacters(in: textRange, with: string)
-            
-            if updatedText.isEmpty {
-                delegate?.searchBarIsEmpty()
-            } else {
-                delegate?.search(currentText)
-            }
-        }
+        guard let currentText = textField.text, let textRange = Range(range, in: currentText)
+        else { return true }
+        
+        delegate?.search(currentText.replacingCharacters(in: textRange, with: string))
+        
         return true
     }
 }

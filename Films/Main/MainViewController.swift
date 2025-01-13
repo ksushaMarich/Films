@@ -64,14 +64,15 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else { return UITableViewCell() }
         
-        cell.isUserInteractionEnabled = true
         cell.configure(with: movies[indexPath.row])
         
         return cell
     }
     
-    #warning("сделала распознование нажатия в ячейки стандартым а не через делегат")
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+        
         navigationController?.pushViewController(ViewBuilder.build(type: .movieDetails(id: movies[indexPath.row].id)), animated: true)
     }
 }
@@ -79,13 +80,14 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 extension MainViewController: MainViewInput {
     
     func update(with movies: [Movie]) {
+        
         self.movies = movies
-        #warning("Добавила прокрутку на верх при поиске фильмов")
-        tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         tableView.reloadData()
+        
+        guard movies.count > 0 else { return }
+        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
     }
     
-    #warning("добавила отображение алерта в случаях возникновения ошибки")
     func showAlert(with title: String) {
         let alertController = UIAlertController(title: title, message: nil, preferredStyle: .alert)
             
@@ -100,10 +102,6 @@ extension MainViewController: SearchHeaderViewDelegate {
     
     func search(_ query: String) {
         presenter?.searchMovies(with: query)
-    }
-    
-    func searchBarIsEmpty() {
-        presenter?.searchBarIsEmpty()
     }
 }
 

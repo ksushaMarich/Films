@@ -10,7 +10,7 @@ import Foundation
 // MARK: - error
 enum APIError: Error {
     case invalidURL
-    case noData
+    case badData
     case serverError
     case decodingError
 }
@@ -19,8 +19,8 @@ extension APIError: CustomStringConvertible {
     var description: String {
         switch self {
         case .invalidURL: return "Invalid URL"
-        case .noData: return "No data"
-        case .serverError: return "Проверте подключение"
+        case .badData: return "No data"
+        case .serverError: return "Проверьте подключение"
         case .decodingError: return "Decoding error"
         }
     }
@@ -62,13 +62,3 @@ struct Genre: Decodable {
     let id: Int
     let name: String
 }
-
-#warning("не помню что это такое")
-/*
- private let booleanNum: Int
- 
- var booleanValue: Bool {
-     booleanNum > 0
- }
- */
-

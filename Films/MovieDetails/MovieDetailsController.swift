@@ -43,14 +43,13 @@ class MovieDetailsController: UIViewController {
         return imageView
     }()
     
-    #warning("новый элемент")
-    private lazy var backImageVeiw: UIImageView = {
+    private lazy var backView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.tintColor = .white
         view.image = UIImage(systemName: "arrowshape.backward.fill")
         view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(backImageViewTapped)))
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(back)))
         return view
     }()
     
@@ -96,7 +95,7 @@ class MovieDetailsController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(posterImageView)
-        contentView.addSubview(backImageVeiw)
+        contentView.addSubview(backView)
         contentView.addSubview(overviewLabel)
         
         let inset = CGFloat(16)
@@ -117,10 +116,10 @@ class MovieDetailsController: UIViewController {
             posterImageView.heightAnchor.constraint(equalToConstant: 300),
             posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 0.7),
             
-            backImageVeiw.topAnchor.constraint(equalTo: posterImageView.topAnchor),
-            backImageVeiw.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
-            backImageVeiw.heightAnchor.constraint(equalToConstant: 25),
-            backImageVeiw.widthAnchor.constraint(equalTo: backImageVeiw.heightAnchor),
+            backView.topAnchor.constraint(equalTo: posterImageView.topAnchor),
+            backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
+            backView.heightAnchor.constraint(equalToConstant: 25),
+            backView.widthAnchor.constraint(equalTo: backView.heightAnchor),
             
             overviewLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: inset),
             overviewLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -129,18 +128,18 @@ class MovieDetailsController: UIViewController {
         ])
     }
     
-    #warning("новый метод")
-    @objc func backImageViewTapped() {
+    @objc func back() {
         navigationController?.popViewController(animated: true)
     }
 }
 
     
 extension MovieDetailsController: MovieDetailsInput {
+    
     func configureWithDetails(_ movieDetails: MovieDetails) {
         overviewLabel.text = movieDetails.overview
     }
-    #warning("новая функция")
+    
     func configureWithPoster(_ poster: UIImage) {
         posterImageView.image = poster
     }
