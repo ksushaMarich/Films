@@ -53,9 +53,9 @@ extension MainViewPresenter: MainViewOutput {
     
     #warning("Поменяла функцию теперь она обращается к NM")
     func searchWithClosure(with query: String) {
-        NM.searchMovies(query: query) { movies in
+        NM.searchMoviesWithClosure(query: query, success: { movies in
             self.view?.update(with: movies)
-        } failure: { error in
+        }) { error in
             self.view?.showAlert(with: error)
         }
     }

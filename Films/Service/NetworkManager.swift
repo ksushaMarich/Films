@@ -42,12 +42,18 @@ class NetworkManager {
         return urlComponents.url
     }
     
+    #warning("Разделила типы ошибок")
     func searchMovies(query: String? = nil) async throws -> [Movie] {
+        let gottenData: Data
         
         guard let url = formURL(query: query) else { throw APIError.invalidURL }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            return (try JSONDecoder().decode(MovieResponse.self, from: data)).results
+            gottenData = data
+        } catch { throw APIError.serverError }
+        
+        do {
+            return (try JSONDecoder().decode(MovieResponse.self, from: gottenData)).results
         } catch { throw APIError.badData }
     }
     
@@ -95,13 +101,19 @@ class NetworkManager {
     }
     
     func downloadMovieDetails(for movieId: Int) async throws -> MovieDetails {
+        let gottenData: Data
         
         guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(String(movieId))?api_key=5e491b5e3a7e7c82df6c07d1c7448db1&language=ru-RU")
         else { throw APIError.invalidURL }
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            return try JSONDecoder().decode(MovieDetails.self, from: data)
+            gottenData = data
+            
         } catch { throw APIError.badData }
+        
+        do {
+            return try JSONDecoder().decode(MovieDetails.self, from: gottenData)
+        } catch { throw APIError.decodingError }
     }
 }

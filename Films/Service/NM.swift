@@ -27,7 +27,7 @@ class NM {
         }
     }
     
-    #warning("Новая функция")
+    #warning("Новая функция не дал оставить [weak self]")
     static func searchMoviesWithClosure(query: String, success: @escaping ([Movie]) -> Void, failure: @escaping (String) -> Void) {
         networkManager.searchMoviesWithClosure(for: query) { result in
             switch result {
