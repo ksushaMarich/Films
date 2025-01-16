@@ -15,28 +15,24 @@ class SearchHeaderView: UITableViewHeaderFooterView {
     
     //MARK: - naming
     static let identifier = "SearchHeaderView"
+    #warning("Добавила переменные для того что бы использовать ее в SearchTextFeld")
+    static let textFieldHeightAnchor = CGFloat(40)
+    static let inset = CGFloat(10)
     
     weak var delegate: SearchHeaderViewDelegate?
     
     #warning("Новая переменная таймер для задержки")
     private var timer: Timer?
     
-    private lazy var textField: UITextField = {
-        let textField = UITextField()
+    #warning("Теперь подписанн на кастомный класс")
+    private lazy var textField: SearchTextFeld = {
+        let textField = SearchTextFeld()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 5
         textField.backgroundColor = .white
         textField.delegate = self
         return textField
-    }()
-    
-    private lazy var searchImageView: UIImageView = {
-        let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.tintColor = .systemGray
-        view.image = UIImage(systemName: "magnifyingglass")
-        return view
     }()
     
     //MARK: - init
@@ -53,20 +49,14 @@ class SearchHeaderView: UITableViewHeaderFooterView {
     //MARK: - setup view methods
     
     private func setupView() {
-        let inset = CGFloat(10)
         contentView.addSubview(textField)
-        textField.addSubview(searchImageView)
         
         NSLayoutConstraint.activate([
             textField.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             textField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 70),
-            textField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset),
-            textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset*2),
-            textField.heightAnchor.constraint(equalToConstant: 40),
-            
-            searchImageView.topAnchor.constraint(equalTo: textField.topAnchor, constant: inset),
-            searchImageView.bottomAnchor.constraint(equalTo: textField.bottomAnchor, constant: -inset),
-            searchImageView.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -inset),
+            textField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SearchHeaderView.inset),
+            textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SearchHeaderView.inset*2),
+            textField.heightAnchor.constraint(equalToConstant: SearchHeaderView.textFieldHeightAnchor)
         ])
     }
 }
