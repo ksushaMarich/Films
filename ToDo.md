@@ -35,3 +35,6 @@
 Movie, NetworkManager, cells, SceneDelegate,  Builder
 MainViewController, MainViewPresenter
 MovieDetailsPresenter, MovieDetailsController
+
+
+проверка
