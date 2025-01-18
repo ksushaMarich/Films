@@ -26,12 +26,13 @@ class MainViewPresenter {
     
     private lazy var popularMovies: [Movie] = []
     
+    #warning("Добавила weak self, что бы предотватить утечку памяти")
     init() {
-        NM.searchMovies { popularMovies in
-            self.popularMovies = popularMovies
-            self.view?.update(with: popularMovies)
-        } failure: { error in
-            self.view?.showAlert(with: error)
+        NM.searchMovies { [weak self] popularMovies in
+            self?.popularMovies = popularMovies
+            self?.view?.update(with: popularMovies)
+        } failure: { [weak self] error in
+            self?.view?.showAlert(with: error)
         }
     }
 }

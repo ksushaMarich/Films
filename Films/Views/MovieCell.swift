@@ -74,9 +74,9 @@ class MovieCell: UITableViewCell {
     func configure(with movie: Movie) {
         self.movie = movie
         titleLabel.text = movie.title
-        
-        NM.downloadPoster(posterPath: movie.poster) { poster in
-            self.posterImageView.image = poster
+        #warning("Добавила weak self, что бы предотватить утечку памяти")
+        NM.downloadPoster(posterPath: movie.poster) { [weak self] poster in
+            self?.posterImageView.image = poster
         } failure: { error in
             print(error)
         }
