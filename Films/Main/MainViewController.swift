@@ -75,6 +75,11 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         
         navigationController?.pushViewController(ViewBuilder.build(type: .movieDetails(id: movies[indexPath.row].id)), animated: true)
     }
+    
+    #warning("Добавила новй метод для того что бы скрывать клавиатуру")
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        tableView.endEditing(true)
+    }
 }
 
 extension MainViewController: MainViewInput {
@@ -83,6 +88,7 @@ extension MainViewController: MainViewInput {
         
         self.movies = movies
         tableView.reloadData()
+        guard let header = tableView.headerView(forSection: 0) as? SearchHeaderView else { return }
         
         guard movies.count > 0 else { return }
         tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)

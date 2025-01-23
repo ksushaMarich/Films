@@ -82,6 +82,8 @@ class MovieDetailsController: UIViewController {
     // MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        #warning("Добавила свайп назад")
+        view.addGestureRecognizer(UISwipeGestureRecognizer(target: self, action: #selector(back)))
         
         presenter?.getDetails(by: id)
         setupView()

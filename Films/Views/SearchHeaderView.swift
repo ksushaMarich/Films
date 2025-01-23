@@ -59,6 +59,10 @@ class SearchHeaderView: UITableViewHeaderFooterView {
             textField.heightAnchor.constraint(equalToConstant: SearchHeaderView.textFieldHeightAnchor)
         ])
     }
+    #warning("Новый метод что бы не терялась строчка")
+    func setupTextField(text: String?) {
+        textField.text = text
+    }
 }
 
 extension SearchHeaderView: UITextFieldDelegate {
@@ -81,4 +85,10 @@ extension SearchHeaderView: UITextFieldDelegate {
         
         return true
     }
+    
+    #warning("Добавила метод для скрытия клавиатруры")
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            endEditing(true) 
+            return true
+       }
 }
