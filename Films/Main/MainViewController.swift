@@ -63,7 +63,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else { return UITableViewCell() }
-        
+        presenter?.getPoster(at: indexPath, for: movies[indexPath.row])
         cell.configure(with: movies[indexPath.row])
         
         return cell
@@ -88,7 +88,6 @@ extension MainViewController: MainViewInput {
         
         self.movies = movies
         tableView.reloadData()
-        guard let header = tableView.headerView(forSection: 0) as? SearchHeaderView else { return }
         
         guard movies.count > 0 else { return }
         tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
@@ -101,6 +100,11 @@ extension MainViewController: MainViewInput {
         alertController.addAction(okAction)
         
         present(alertController, animated: true, completion: nil)
+    }
+    
+    func configCellWithPoster(with poster: UIImage, at indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? MovieCell else { return }
+        cell.configWithPoster(poster: poster)
     }
 }
 

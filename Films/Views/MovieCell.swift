@@ -71,14 +71,13 @@ class MovieCell: UITableViewCell {
     }
     
     //MARK: - configuring cell method
+    #warning("Попыталась восстановить что делали на занятии")
+    func configWithPoster(poster: UIImage) {
+        posterImageView.image = poster
+    }
+    
     func configure(with movie: Movie) {
         self.movie = movie
         titleLabel.text = movie.title
-        #warning("Добавила weak self, что бы предотватить утечку памяти")
-        NM.downloadPoster(posterPath: movie.poster) { [weak self] poster in
-            self?.posterImageView.image = poster
-        } failure: { error in
-            print(error)
-        }
     }
 }

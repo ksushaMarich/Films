@@ -5,7 +5,7 @@
 //  Created by Ксения Маричева on 20.12.2024.
 //
 
-import Foundation
+import UIKit
 
 let viaClosure = true
 
@@ -13,11 +13,13 @@ protocol MainViewInput: AnyObject {
     var presenter: MainViewOutput? { get set }
     func update(with movies: [Movie])
     func showAlert(with title: String)
+    func configCellWithPoster(with poster: UIImage, at indexPath: IndexPath)
 }
 
 protocol MainViewOutput: AnyObject {
     var view: MainViewInput? { get set }
     func searchMovies(with query: String)
+    func getPoster(at indexPath: IndexPath, for movie: Movie)
 }
 
 class MainViewPresenter {
@@ -59,5 +61,15 @@ extension MainViewPresenter: MainViewOutput {
         }) { error in
             self.view?.showAlert(with: error)
         }
+    }
+
+    func getPoster(at indexPath: IndexPath, for movie: Movie) {
+        #warning("Пыталась востановить метод который делали на занятии")
+        NM.downloadPoster(posterPath: movie.poster) { [weak self] poster in
+            self?.view?.configCellWithPoster(with: poster, at: indexPath)
+        } failure: { error in
+            print(error)
+        }
+
     }
 }
