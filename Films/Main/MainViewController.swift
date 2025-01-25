@@ -63,8 +63,11 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.identifier, for: indexPath) as? MovieCell else { return UITableViewCell() }
-        presenter?.getPoster(at: indexPath, for: movies[indexPath.row])
-        cell.configure(with: movies[indexPath.row])
+        
+        let movie = movies[indexPath.row]
+        
+        presenter?.getPoster(for: movie, at: indexPath)
+        cell.configure(with: movie)
         
         return cell
     }
@@ -73,10 +76,11 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        navigationController?.pushViewController(ViewBuilder.build(type: .movieDetails(id: movies[indexPath.row].id)), animated: true)
+        guard let cell = tableView.cellForRow(at: indexPath) as? MovieCell else { return }
+        
+        navigationController?.pushViewController(ViewBuilder.build(type: .movieDetails(id: movies[indexPath.row].id, poster: cell.posterImageView.image)), animated: true)
     }
     
-    #warning("Добавила новй метод для того что бы скрывать клавиатуру")
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         tableView.endEditing(true)
     }
@@ -102,9 +106,9 @@ extension MainViewController: MainViewInput {
         present(alertController, animated: true, completion: nil)
     }
     
-    func configCellWithPoster(with poster: UIImage, at indexPath: IndexPath) {
+    func configureCellWithPoster(_ poster: UIImage, at indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? MovieCell else { return }
-        cell.configWithPoster(poster: poster)
+        cell.configureWithPoster(poster)
     }
 }
 

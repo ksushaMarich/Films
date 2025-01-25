@@ -24,22 +24,10 @@ class MovieDetailsPresenter: MovieDetailsOutput {
     weak var view: MovieDetailsInput?
     
     // MARK: - methods
-    #warning("Поменяла метод что бы работал через обращение к NM")
+    
     func getDetails(by movieId: Int) {
-        var gottenDetails: MovieDetails?
-        
-        #warning("Добавила weak self, что бы предотватить утечку памяти")
         NM.getDetails(by: movieId) { [weak self] movieDetails in
             self?.view?.configureWithDetails(movieDetails)
-            gottenDetails = movieDetails
-            
-            NM.downloadPoster(posterPath: gottenDetails?.poster) { [ weak self] poster in
-                self?.view?.configureWithPoster(poster)
-                
-            } failure: { error in
-                print(error)
-            }
-            
         } failure: { error in
             print(error)
         }

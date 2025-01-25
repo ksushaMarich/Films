@@ -9,7 +9,7 @@ import UIKit
 
 enum ViewType {
     case main
-    case movieDetails(id: Int)
+    case movieDetails(id: Int, poster: UIImage?)
 }
 
 class ViewBuilder {
@@ -23,8 +23,9 @@ class ViewBuilder {
             view.presenter = presenter
             presenter.view = view
             return UINavigationController(rootViewController: view)
-        case .movieDetails(let id):
+        case .movieDetails(let id, let poster):
             let view = MovieDetailsController(id: id)
+            view.poster = poster
             let presenter = MovieDetailsPresenter()
             view.presenter = presenter
             presenter.view = view

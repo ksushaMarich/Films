@@ -18,7 +18,6 @@ class NM {
                 DispatchQueue.main.async {
                     success(movies)
                 }
-                
             } catch let error as APIError {
                 DispatchQueue.main.async {
                     failure(error.description)
@@ -27,7 +26,6 @@ class NM {
         }
     }
     
-    #warning("Новая функция не дал оставить [weak self]")
     static func searchMoviesWithClosure(query: String, success: @escaping ([Movie]) -> Void, failure: @escaping (String) -> Void) {
         networkManager.searchMoviesWithClosure(for: query) { result in
             switch result {
@@ -42,16 +40,15 @@ class NM {
             }
         }
     }
-    #warning("Новая функция")
+    
     static func downloadPoster(posterPath: String?, success: @escaping (UIImage) -> Void, failure: @escaping (String) -> Void) {
         Task {
             do {
-                let poster = try await NetworkManager.shared.downloadPoster(poster: posterPath)
+                let poster = try await networkManager.downloadPoster(poster: posterPath)
                 
                 DispatchQueue.main.async {
                     success(poster)
                 }
-                
             } catch let error as APIError {
                 DispatchQueue.main.async {
                     failure(error.description)
@@ -60,7 +57,6 @@ class NM {
         }
     }
     
-    #warning("Новая функция")
     static func getDetails(by movieId: Int, success: @escaping (MovieDetails) -> Void, failure: @escaping (String) -> Void) {
         Task {
             do {
@@ -68,7 +64,6 @@ class NM {
                 DispatchQueue.main.async {
                     success(movieDetails)
                 }
-                
             } catch let error as APIError {
                 DispatchQueue.main.async {
                     failure(error.description)

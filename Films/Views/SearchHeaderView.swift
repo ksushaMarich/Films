@@ -21,12 +21,10 @@ class SearchHeaderView: UITableViewHeaderFooterView {
     
     weak var delegate: SearchHeaderViewDelegate?
     
-    #warning("Новая переменная таймер для задержки")
     private var timer: Timer?
     
-    #warning("Теперь подписанн на кастомный класс")
-    private lazy var textField: SearchTextFeld = {
-        let textField = SearchTextFeld()
+    private lazy var textField: SearchTextField = {
+        let textField = SearchTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 5
@@ -59,14 +57,10 @@ class SearchHeaderView: UITableViewHeaderFooterView {
             textField.heightAnchor.constraint(equalToConstant: SearchHeaderView.textFieldHeightAnchor)
         ])
     }
-    #warning("Новый метод что бы не терялась строчка")
-    func setupTextField(text: String?) {
-        textField.text = text
-    }
 }
 
 extension SearchHeaderView: UITextFieldDelegate {
-    #warning("Добавила задержку")
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         timer?.invalidate()
@@ -74,10 +68,10 @@ extension SearchHeaderView: UITextFieldDelegate {
         guard let currentText = textField.text, let textRange = Range(range, in: currentText)
         else { return true }
         
-        #warning(" Добавила проверку на пробелы остальные знаки решила оставить вдруг они начало фильма")
         let newText = currentText.replacingCharacters(in: textRange, with: string)
         
-        guard currentText != newText.trimmingCharacters(in: .whitespacesAndNewlines) else { return true }
+        //guard currentText.trimmingCharacters(in: .whitespacesAndNewlines) != newText.trimmingCharacters(in: .whitespacesAndNewlines)
+        //else { return true }
         
         timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false, block: {_ in
             self.delegate?.search(newText)
@@ -86,7 +80,6 @@ extension SearchHeaderView: UITextFieldDelegate {
         return true
     }
     
-    #warning("Добавила метод для скрытия клавиатруры")
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             endEditing(true) 
             return true

@@ -27,7 +27,6 @@ class SearchTextField: UITextField {
     init() {
         super.init(frame: .zero)
         attributedPlaceholder = NSAttributedString(string: "Поиск фильма" , attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
-        #warning("Заменила кнопку enter на найти")
         returnKeyType = .search
         setupView()
     }

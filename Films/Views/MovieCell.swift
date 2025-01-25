@@ -24,7 +24,7 @@ class MovieCell: UITableViewCell {
         return label
     }()
     
-    private lazy var posterImageView: UIImageView = {
+    lazy var posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
@@ -41,7 +41,6 @@ class MovieCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .black
-        #warning("Убрала цвет выделения ячейки так больше нравиться")
         selectionStyle = .none
         setupView()
     }
@@ -71,8 +70,7 @@ class MovieCell: UITableViewCell {
     }
     
     //MARK: - configuring cell method
-    #warning("Попыталась восстановить что делали на занятии")
-    func configWithPoster(poster: UIImage) {
+    func configureWithPoster(_ poster: UIImage) {
         posterImageView.image = poster
     }
     

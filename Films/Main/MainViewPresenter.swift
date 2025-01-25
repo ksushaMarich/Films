@@ -13,13 +13,13 @@ protocol MainViewInput: AnyObject {
     var presenter: MainViewOutput? { get set }
     func update(with movies: [Movie])
     func showAlert(with title: String)
-    func configCellWithPoster(with poster: UIImage, at indexPath: IndexPath)
+    func configureCellWithPoster(_ poster: UIImage, at indexPath: IndexPath)
 }
 
 protocol MainViewOutput: AnyObject {
     var view: MainViewInput? { get set }
     func searchMovies(with query: String)
-    func getPoster(at indexPath: IndexPath, for movie: Movie)
+    func getPoster(for movie: Movie, at indexPath: IndexPath)
 }
 
 class MainViewPresenter {
@@ -28,48 +28,47 @@ class MainViewPresenter {
     
     private lazy var popularMovies: [Movie] = []
     
-    #warning("Добавила weak self, что бы предотватить утечку памяти")
+    lazy var successClosure: ([Movie]) -> Void = { [weak self] movies in
+        self?.view?.update(with: movies)
+    }
+    
+    lazy var failureClosure: (String) -> Void = { [weak self] error in
+        self?.view?.showAlert(with: error)
+    }
+    
     init() {
-        NM.searchMovies { [weak self] popularMovies in
+        searchPopularMovies()
+    }
+    
+    private func searchPopularMovies() {
+        NM.searchMovies(success: { [weak self] popularMovies in
             self?.popularMovies = popularMovies
             self?.view?.update(with: popularMovies)
-        } failure: { [weak self] error in
-            self?.view?.showAlert(with: error)
-        }
+        }, failure: failureClosure)
     }
 }
 
 extension MainViewPresenter: MainViewOutput {
     
     func searchMovies(with query: String) {
-        query.isEmpty ? view?.update(with: popularMovies) :
+        
+        let isEmpty = query.isEmpty || query.rangeOfCharacter(from: .whitespacesAndNewlines.inverted) == nil
+        
+        isEmpty ? view?.update(with: popularMovies) :
         viaClosure ? searchWithClosure(with: query) : search(with: query)
     }
     
     func search(with query: String) {
-        NM.searchMovies(query: query) { movies in
-            self.view?.update(with: movies)
-        } failure: { error in
-            self.view?.showAlert(with: error)
-        }
+        NM.searchMovies(query: query, success: successClosure, failure: failureClosure)
     }
     
-    #warning("Поменяла функцию теперь она обращается к NM")
     func searchWithClosure(with query: String) {
-        NM.searchMoviesWithClosure(query: query, success: { movies in
-            self.view?.update(with: movies)
-        }) { error in
-            self.view?.showAlert(with: error)
-        }
+        NM.searchMoviesWithClosure(query: query, success: successClosure, failure: failureClosure)
     }
 
-    func getPoster(at indexPath: IndexPath, for movie: Movie) {
-        #warning("Пыталась востановить метод который делали на занятии")
-        NM.downloadPoster(posterPath: movie.poster) { [weak self] poster in
-            self?.view?.configCellWithPoster(with: poster, at: indexPath)
-        } failure: { error in
-            print(error)
-        }
-
+    func getPoster(for movie: Movie, at indexPath: IndexPath) {
+        NM.downloadPoster(posterPath: movie.poster, success: { [weak self] poster in
+            self?.view?.configureCellWithPoster(poster, at: indexPath)
+        }, failure: failureClosure)
     }
 }

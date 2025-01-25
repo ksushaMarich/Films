@@ -42,31 +42,28 @@ class NetworkManager {
         return urlComponents.url
     }
     
-    #warning("Разделила типы ошибок")
     func searchMovies(query: String? = nil) async throws -> [Movie] {
-        let gottenData: Data
-        
+        let data: Data
         guard let url = formURL(query: query) else { throw APIError.invalidURL }
+        
         do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            gottenData = data
+            (data, _) = try await URLSession.shared.data(from: url)
         } catch { throw APIError.serverError }
         
         do {
-            return (try JSONDecoder().decode(MovieResponse.self, from: gottenData)).results
-        } catch { throw APIError.badData }
+            return (try JSONDecoder().decode(MovieResponse.self, from: data)).results
+        } catch { throw APIError.decodingError }
     }
     
     
     func searchMoviesWithClosure(for query: String,
-                                 completion: @escaping (Result<[Movie], APIError>) -> Void) {
+                                completion: @escaping (Result<[Movie], APIError>) -> Void) {
         
         guard let url = formURL(query: query) else {
             completion(.failure(APIError.invalidURL))
             return
         }
 
-        #warning("Убрала выход в главный поток")
         URLSession.shared.dataTask(with: url) { data, response, error in
                 
                 if let _ = error {
@@ -97,23 +94,21 @@ class NetworkManager {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             return UIImage(data: data) ?? posterImage
-        } catch { throw APIError.badData }
+        } catch { throw APIError.serverError }
     }
     
     func downloadMovieDetails(for movieId: Int) async throws -> MovieDetails {
-        let gottenData: Data
+        let data: Data
         
         guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(String(movieId))?api_key=5e491b5e3a7e7c82df6c07d1c7448db1&language=ru-RU")
         else { throw APIError.invalidURL }
         
         do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            gottenData = data
-            
-        } catch { throw APIError.badData }
+            (data, _) = try await URLSession.shared.data(from: url)
+        } catch { throw APIError.serverError }
         
         do {
-            return try JSONDecoder().decode(MovieDetails.self, from: gottenData)
+            return try JSONDecoder().decode(MovieDetails.self, from: data)
         } catch { throw APIError.decodingError }
     }
 }

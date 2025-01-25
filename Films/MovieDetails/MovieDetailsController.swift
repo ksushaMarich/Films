@@ -15,6 +15,12 @@ class MovieDetailsController: UIViewController {
     
     private let id: Int
     
+    var poster: UIImage? {
+        didSet {
+            posterImageView.image = poster
+        }
+    }
+    
     private lazy var contentView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -82,8 +88,6 @@ class MovieDetailsController: UIViewController {
     // MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        #warning("Добавила свайп назад")
-        view.addGestureRecognizer(UISwipeGestureRecognizer(target: self, action: #selector(back)))
         
         presenter?.getDetails(by: id)
         setupView()
@@ -91,6 +95,8 @@ class MovieDetailsController: UIViewController {
     
     // MARK: - methods
     private func setupView() {
+        
+        view.addGestureRecognizer(UISwipeGestureRecognizer(target: self, action: #selector(back)))
         
         view.backgroundColor = .black
         
