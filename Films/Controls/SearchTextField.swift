@@ -1,13 +1,13 @@
 //
-//  SearchTextFeld.swift
+//  SearchTextField.swift
 //  Films
 //
 //  Created by Ксюша on 15.01.2025.
 //
 
 import UIKit
-#warning("Новый класс")
-class SearchTextFeld: UITextField {
+
+class SearchTextField: UITextField {
     
     // MARK: - naming
     private let inset = SearchHeaderView.inset
